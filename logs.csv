@@ -1,0 +1,31 @@
+timestamp|command|response
+1669094383291|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='limit', tp=17000, sl=2000, price=15000|Response [main] : <Response [200]>
+1669094383291|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='limit', tp=17000, sl=2000, price=15000|{'success': True, 'timestamp': '1669094384.494', 'order_id': 181244806, 'order_type': 'LIMIT', 'order_price': 15000, 'order_quantity': 0.002, 'order_amount': None, 'client_order_id': 0}
+1669094230953|symbol='PERP_BTC_USDT', side='buy', quantity=0.02,  type='limit', tp=17000, sl=2000, price=15000|Response [main] : <Response [400]>
+1669094230953|symbol='PERP_BTC_USDT', side='buy', quantity=0.02,  type='limit', tp=17000, sl=2000, price=15000|{'success': False, 'code': -1101, 'message': 'Your margin is insufficient! Please liquidate assets.'}
+1669090238982|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=2000, price=14000|Response [main] : <Response [200]>
+1669090238982|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=2000, price=14000|{'success': True, 'status': 'CANCEL_ALL_SENT'}
+1669088674862|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|Response [main] : <Response [200]>
+1669088674862|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|{'success': True, 'status': 'CANCEL_ALL_SENT'}
+1669088667455|symbssol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|ERROR (Missing Required Parameter) : 'cancel-limit' order requires a 'symbol' argument.
+1669037124730|symbssol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|ERROR (Missing Required Parameter) : 'cancel-limit' order requires a 'symbol' argument.
+1669037099049||ERROR (Cannot Read Alert Message) :             Make sure your alert message is written and punctuated correctly.
+1669037055037|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|Response [main] : <Response [200]>
+1669037055037|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|Response [account_2] : <Response [401]>
+1669037055037|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|{'success': True, 'status': 'CANCEL_ALL_SENT'}
+1669037055037|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|{'success': False, 'code': -1001, 'message': 'The API signature is invalid.'}
+1669037020877|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|{'success': True, 'status': 'CANCEL_ALL_SENT'}
+1669037020877|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|{'success': False, 'code': -1001, 'message': 'The API signature is invalid.'}
+1669036905282|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|{'success': True, 'status': 'CANCEL_ALL_SENT'}
+1669088674862|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|Response [main] : <Response [200]>
+1669088674862|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|{'success': True, 'status': 'CANCEL_ALL_SENT'}
+1669088667455|symbssol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|ERROR (Missing Required Parameter) : 'cancel-limit' order requires a 'symbol' argument.
+1669037124730|symbssol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|ERROR (Missing Required Parameter) : 'cancel-limit' order requires a 'symbol' argument.
+1669037099049||ERROR (Cannot Read Alert Message) :             Make sure your alert message is written and punctuated correctly.
+1669037055037|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|Response [main] : <Response [200]>
+1669037055037|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|Response [account_2] : <Response [401]>
+1669037055037|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|{'success': True, 'status': 'CANCEL_ALL_SENT'}
+1669037055037|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|{'success': False, 'code': -1001, 'message': 'The API signature is invalid.'}
+1669037020877|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|{'success': True, 'status': 'CANCEL_ALL_SENT'}
+1669037020877|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|{'success': False, 'code': -1001, 'message': 'The API signature is invalid.'}
+1669036905282|symbol='PERP_BTC_USDT', side='buy', quantity=0.002,  type='cancel-limit', tp=17000, sl=15000, price=14000|{'success': True, 'status': 'CANCEL_ALL_SENT'}

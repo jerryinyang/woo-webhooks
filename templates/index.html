@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')}}">
+  
+  <title>API Management</title>
+</head>
+
+<body onload="reloadPage()">
+  {% if reload_page == True %}
+  <script>
+      function reloadPage() {
+        if ("{{ reload_page }}" == "True") {
+          location.reload();
+        }
+      }
+    </script>
+  {% endif %}
+
+  <div class="wrapper">
+    <header id="header">
+      <ul id="main-nav">
+        <li><a href="#section-one">Home</a></li>
+        <li><a href="#section-two">Syntax</a></li>
+        <li><a href="#section-three"> Logs</a></li>
+      </ul>
+    </header>
+  </div>
+
+  <button class="nav-btn open-btn">
+    <i class="fas fa-bars"></i>
+  </button>
+
+
+  <div class="nav white active">
+    <button class="nav-btn close-btn">
+      <i class="fas fa-times"></i>
+    </button>
+
+    <ul class="list">
+      <li><a href="#section-one">Home</a></li>
+      <li><a href="#section-two">Syntax</a></li>
+      <li><a href="#section-three"> Logs</a></li>
+    </ul>
+  </div>
+
+
+  <section id="section-one">
+    <div class="main-wrap">
+      <div class="wrapper-1 wrapper-bg">
+        <h1>ACCOUNTS</h1>
+        <div class="scroll">
+          {% for account in data%}
+          <div class="box">
+            <div class="form-control">
+              <p>Name:</p>
+              <p>{{ account[0] }}</p>
+            </div>
+            <div class="form-control">
+              <p>Key:    </p>
+              <p>{{ account[1] }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="wrapper-2 wrapper-bg">
+        <!-- Add API -->
+        <div class="add-api api">
+          <form method="POST">
+            <div class="form-control">
+              <label>Account Name</label>
+              <input type="text" placeholder="Account Name" name="account_name">
+            </div>
+            <div class="form-control">
+              <label>API Key</label>
+              <input type="text" placeholder=" API Key" name="api_key">
+            </div>
+            <div class="form-control">
+              <label>API Secret Key</label>
+              <input type="text" placeholder="API Secret Key" name="api_secret">
+            </div>
+            <div class="form-control">
+              <label>Password</label>
+              <input type="password" placeholder=" Password" name="password">
+            </div>
+            <div class="form-control">
+              <input type="submit" class="button" value="Add API">
+            </div>
+          </form>
+        </div>
+
+        <!-- Remove API -->
+        <div class="remove-api api">
+          <form method="POST">
+            <div class="form-control">
+              <label>Account Name</label>
+              <input type="text" placeholder="Account Name" name="remove_name">
+            </div>
+            <div class="form-control">
+              <label>Password</label>
+              <input type="password" placeholder="Password" name="password">
+            </div>
+            <input type="submit" value="Remove API" class="button">
+          </form>
+
+        </div>
+  </section>
+  <section id="section-two">
+    <h1>Syntax</h1>
+    <div class="syntax-wrapper">
+      <div class="container main-grid">
+        <div class="grid-0 full_screen">
+          <strong>PARAMETERS</strong>
+          <dl style="margin-top: 10px;">
+            <dt style="margin-top: 10px;">--> <span class="syntax-code">type</span>: (required)</dt>
+            <dd>Possible Value: <span class="syntax-code">market</span> |
+              <span class="syntax-code">limit</span> |
+              <span class="syntax-code">stop</span> |
+              <span class="syntax-code">close</span> |
+              <span class="syntax-code">cancel-limit</span> |
+              <span class="syntax-code">cancel-stop</span> |
+              <span class="syntax-code">cancel-all</span> |
+              <span class="syntax-code">tp-sl</span>
+            </dd>
+
+            <dt style="margin-top: 10px;">--> <span class="syntax-code">side</span>:</dt>
+            <dd>Possible Value:
+              <span class="syntax-code">buy</span> |
+              <span class="syntax-code">sell</span>
+
+            <dt style="margin-top: 10px;">--> Other parameters :</dt>
+            <dd>
+              <span class="syntax-code">symbol</span> (string),
+              <span class="syntax-code">price</span> (number),
+              <span class="syntax-code">quantity</span> (number),
+              <span class="syntax-code">tp</span> (number),
+              <span class="syntax-code">sl</span> (number)
+          </dl>
+        </div>
+
+        <div></div>
+
+        <div class="full_screen">
+          <h1 style="text-align: center;">Examples</h1>
+        </div>
+
+        <div></div>
+
+        <div class="grid-1 grid">
+          <strong>Market Order</strong> <br>
+          <p style="margin-top: 10px;">
+            <span class="syntax-code">type='market', symbol='PERP_BTC_USDT', side='buy',
+              quantity=1000</span>
+          </p>
+        </div>
+
+        <div class="grid-2 grid">
+          <strong>Limit Order</strong> <br>
+          <p style="margin-top: 10px;">
+            <span class="syntax-code">type='limit', symbol='PERP_BTC_USDT', side='buy', price=2500,
+              quantity=1000</span>
+          </p>
+        </div>
+
+        <div class="grid-3 grid">
+          <strong>Stop-Market Order</strong> <br>
+          <p style="margin-top: 10px;">
+            <span class="syntax-code">type='stop', symbol='PERP_BTC_USDT', side='buy', price=2500,
+              quantity=1000</span>
+          </p>
+        </div>
+
+        <div class="grid-4 grid">
+          <strong>Close Position</strong> <br>
+          <p style="margin-top: 10px;">
+            <span class="syntax-code">type='close', symbol='PERP_BTC_USDT', side='buy', quantity=1000</span>
+          </p>
+          <p>Note: Make sure to specify that 'type' as 'close'. \n The 'side' is the direction of the original
+            position you want to close</p>
+        </div>
+
+        <div class="grid-5 grid">
+          <strong>Cancel-Limit</strong> <br>
+          <p style="margin-top: 10px;">
+            <span class="syntax-code">type='cancel-limit', symbol='PERP_BTC_USDT'</span>
+          </p>
+        </div>
+
+        <div class="grid-6 grid">
+          <strong>Cancel-Stop</strong> <br>
+          <p style="margin-top: 10px;">
+            <span class="syntax-code">type='cancel-stop', symbol='PERP_BTC_USDT, side='buy'</span>
+          </p>
+        </div>
+
+        <div class="grid-7 grid">
+          <strong>Cancel-All</strong> <br>
+          <p style="margin-top: 10px;">
+            <span class="syntax-code">type='cancel-all', symbol='PERP_BTC_USDT, side='buy'</span>
+          </p>
+        </div>
+
+        <div class="grid-8 grid">
+          <strong>Take Profit and Stop Loss</strong> <br>
+          <p style="margin-top: 10px;">
+            <span class="syntax-code">type='tp-sl', symbol='PERP_BTC_USDT, side='buy', tp=5000,
+              sl=1000</span>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="section-three">
+    <form method="POST" class="refresh">
+        <input type="submit" value="Refresh"  style="margin-bottom: 
+      20px;" class=" button">      
+     </form>
+
+     <div class="container">
+      <div class="header">
+        <div class="header-section">
+          <div>Timestamp</div>
+          <div>Tradingview Payload</div>
+          <div>Response</div>
+        </div>
+      </div>
+      {% for log in logs %}
+      <div class="body">
+         <div class="body-section" data-more>
+           <div>{{ log[0] }}</div>
+           <div>{{ log[1] }}</div>
+           <div>{{ log[2] }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    
+    <div style="height:500px;width:100px;"></div>
+   
+  </section>
+
+  <script type="text/javascript"
+    src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+
+</html>
