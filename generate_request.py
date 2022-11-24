@@ -7,12 +7,20 @@ import requests
 from classes import API_Account, PayloadRequest
 from syntax import *
 
+def generate_request(_account : API_Account , _payload : str, _timestamp : str):
+    list_payload = payload_handler(_payload)
+
+    list_request = []
+    for payload in list_payload:
+        list_request.append(payload_to_request(_account, payload, _timestamp))
+
+    return list_request
+
 def send_request(_type, url, headers, data):
     if (_type == 'cancel-all') or (_type == 'cancel-limit') or (_type == 'cancel-stop'):
         return requests.delete(url, headers=headers, data=data)
     
     return requests.post(url, headers=headers, data=data)
-
 
 def generate_error(message):
     return {
@@ -30,18 +38,51 @@ def generate_signature(_message : str, api_secret : str):
         msg=_message.encode('utf-8'),
         digestmod=hashlib.sha256).hexdigest()
 
-def payload_to_request(_account : API_Account , _payload : str, _timestamp : str):
-    """   
-        Returns:
-            Response_Message: String Describing the error that may have occured during the function call.
-            List of Request Object: Returns a list of request objects; can return more than one request objects
-    """
-    response_message = ''
-    data = ''
-    url_path = ''
-    header = ''
+def payload_handler(_payload):
+    """Converts Payload String from Tradingview Alerts into Payload Dictionary.
 
-    #region ----- Tradingview Alert (Payload) to Dictionary
+    Args:
+        payload (string) : Alert Message from Tradingview.
+
+    Returns:
+        A List containing a Tuple(s) of 
+            - dictionary/dictionaries, with alert/payload elements.
+            - A response message for any errors encountered.
+
+    Raises:
+        ERROR (Cannot Read Alert Message): If the parsed payload string is not readable.
+    """
+
+    list_payload = []
+
+    # Multiple Requests in One Payload
+    if ';' in _payload:
+        all_payloads = _payload.split(';')
+
+        for payload in all_payloads:
+            try:
+                # Prepare Payload
+                payload = payload.strip().replace(' ', '').split(',')
+            
+                # Seperate Payload into Dictionary
+                payload_dict = {}
+                for item in payload:
+                    (key, value) = item.lower().split('=')
+                    payload_dict[key] = value.replace('\'', '').replace('\"', '').upper()
+                
+                response_message = 'Success'
+
+            except:
+                # ERROR: Unknown Error
+                payload_dict = {}
+                response_message = 'ERROR (Cannot Read Alert Message or Messages) : \
+                    Make sure your alert messages are written and punctuated correctly, and Separated with a ';''
+            
+            list_payload.append((payload_dict, response_message))
+        
+        return list_payload
+
+    # Single Request in a Payload
     try:
         # Prepare Payload
         payload = _payload.strip().replace(' ', '').split(',')
@@ -51,18 +92,54 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
         for item in payload:
             (key, value) = item.lower().split('=')
             payload_dict[key] = value.replace('\'', '').replace('\"', '').upper()
+        
+        response_message = 'Success'
 
     except:
         # ERROR: Unknown Error
+        payload_dict = {}
         response_message = 'ERROR (Cannot Read Alert Message) : \
             Make sure your alert message is written and punctuated correctly.'
-        
+    
+    list_payload.append((payload_dict, response_message))
+
+
+    return list_payload
+
+def payload_to_request(_account : API_Account , _payload : str, _timestamp : str):
+    """
+        Returns:
+            Response_Message: String Describing the error that may have occured during the function call.
+            List of Request Object: Returns a list of request objects; can return more than one request objects
+    """
+    response_message = ''
+    data = ''
+    url_path = ''
+    header = ''
+
+    payload_dict, response_message = _payload
+    if 'ERROR' in response_message:
+        return (response_message, None)
+
+    #region ----- Authenticate Payload
+    if 'token' not in payload_dict.keys():
+        response_message = 'ERROR (Payload Not Authenticated) : \'token\' parameter is required to authenticate payload.'
+        return (response_message, None)
+    
+    _token  = payload_dict['token'].lower()
+    
+    # ERROR: Check if token matches the stored token
+    if _token != config.WEBHOOK_TOKEN:
+        response_message = 'ERROR (Wrong Authentication Token) : Wrong Authentication Token.'
         return response_message, None
+    #endregion
+
+    #region ----- Confirm Payload Type
 
     # ERROR: if 'type' key is not in payload
     if 'type' not in payload_dict.keys():
         response_message = 'ERROR (Missing Required Parameter) : \'type\' parameter is not defined.'
-        return response_message, None
+        return (response_message, None)
     
     _type = payload_dict['type'].lower().replace(' ', '-').replace('_', '-')
     
@@ -70,10 +147,10 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
     if _type not in CONST_TYPES:
         response_message = 'ERROR (Invalid Arguments Passed) : \'{type}\' argument passed for \'type\' parameter is not valid/recognized.'\
             .format(type=_type)
-        return response_message, None
+        return (response_message, None)
+    #endregion
 
-
-    #region ----- Alternative Pathway For Multiple Cancels
+    #region ----- Alternative Algorithm For Multiple Cancels
     if _type == 'cancel-all':
         list_type = ['cancel-limit', 'cancel-stop']
         
@@ -87,7 +164,7 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
                 if _param not in payload_dict.keys():
                     response_message = 'ERROR (Missing Required Parameter) : \'{type}\' order requires a \'{param}\' argument.'\
                         .format(type=current_type, param=_param)
-                    return response_message, None
+                    return (response_message, None)
 
                 # CONTINUE LOGIC : Order type is defined, and all the required arguments have been passed. Collect required parameters
                 else:
@@ -95,7 +172,7 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
                     if (_param == 'side') and (payload_dict[_param] not in CONST_SIDE):
                         response_message = 'ERROR (Invalid Arguments Passed) : \'{side}\' argument passed for \'side\' parameter is not valid/recognized.'\
                             .format(side=payload_dict[_param])
-                        return response_message, None
+                        return (response_message, None)
                     
                     _required_params[_param] = payload_dict[_param]
 
@@ -146,9 +223,10 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
 
             list_request.append(request)
         
-        return response_message, list_request
+        return (response_message, list_request)
     #endregion
     
+    #region ----- Confirm Required Parameters
     _required_params = {}
     # Load Required Parameters from Payload Dictionary
     for _param in DICT_PARAMS[_type]:
@@ -156,7 +234,7 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
         if _param not in payload_dict.keys():
             response_message = 'ERROR (Missing Required Parameter) : \'{type}\' order requires a \'{param}\' argument.'\
                 .format(type=_type, param=_param)
-            return response_message, None
+            return (response_message, None)
 
         # CONTINUE LOGIC : Order type is defined, and all the required arguments have been passed. Collect required parameters
         else:
@@ -164,12 +242,12 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
             if (_param == 'side') and (payload_dict[_param] not in CONST_SIDE):
                 response_message = 'ERROR (Invalid Arguments Passed) : \'{side}\' argument passed for \'side\' parameter is not valid/recognized.'\
                     .format(side=payload_dict[_param])
-                return response_message, None
+                return (response_message, None)
             
             _required_params[_param] = payload_dict[_param]
     #endregion
 
-    # Generate Request Body and Normalised Body
+    #region ----- Generate Request Body and Normalised Body
     url_path = DICT_URL[_type]
     header = DICT_HEADER[_type].copy()
     data = DICT_DATA[_type].copy()
@@ -261,22 +339,44 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
         _normal_body = '{timestamp}{message}'.format(message=_normal_body, timestamp=_timestamp)
 
     elif _type == 'tp-sl' :
+
+
         _side = 'BUY' if (_required_params['side'] == 'sell') else 'SELL'
 
         _symbol = _required_params['symbol']
         _tp = _required_params['tp']
         _sl = _required_params['sl']
+        _reduce = _required_params['reduce_only'].lower()
+        
+        if float(_tp) == 0:
+            data = DICT_DATA['sl']
+            data["symbol"] = _symbol
+            data["childOrders"][0]['triggerPrice'] = _sl
+            data["childOrders"][0]['side'] = _side
+            data["childOrders"][0]['reduceOnly'] = _reduce
 
-        data["symbol"] = _symbol
-        data["childOrders"][0]['triggerPrice'] = _tp
-        data["childOrders"][1]['triggerPrice'] = _sl
-        data["childOrders"][0]['side'] = _side
-        data["childOrders"][1]['side'] = _side
+        elif float(_sl) == 0:
+            data = DICT_DATA['tp']
+            data["symbol"] = _symbol
+            data["childOrders"][0]['triggerPrice'] = _tp
+            data["childOrders"][0]['side'] = _side
+            data["childOrders"][0]['reduceOnly'] = _reduce
+
+        else:
+            data["symbol"] = _symbol
+            data["childOrders"][0]['triggerPrice'] = _tp
+            data["childOrders"][1]['triggerPrice'] = _sl
+            data["childOrders"][0]['side'] = _side
+            data["childOrders"][1]['side'] = _side
+            data["childOrders"][0]['reduceOnly'] = _reduce
+            data["childOrders"][1]['reduceOnly'] = _reduce
         data = json.dumps(data)
 
         _normal_body = _normal_body.format(data=data)
         _normal_body = '{timestamp}{message}'.format(message=_normal_body, timestamp=_timestamp)
     
+    #endregion
+
     # Generate Signature From Normalized Body
     account_key = _account.getKey()
     account_secret = _account.getSecret()
@@ -292,4 +392,8 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
     # Create a Request Object with the results
     response_message = 'SUCCESS : Request Generated Successfully.'
     request = PayloadRequest(_type, url_path, header, data, _timestamp)
-    return response_message, [request]
+    return (response_message, [request])
+
+
+
+

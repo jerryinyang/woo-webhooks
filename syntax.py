@@ -33,7 +33,7 @@ PARAMS_ORDER_CANCEL_LIMIT = ['symbol']
 
 PARAMS_ORDER_CANCEL_STOP = ['symbol', 'side']
 PARAMS_ORDER_STOP = ['symbol', 'side', 'price', 'quantity']
-PARAMS_ORDER_TP_SL = ['symbol', 'tp', 'sl', 'side']
+PARAMS_ORDER_TP_SL = ['symbol', 'tp', 'sl', 'side', 'reduce_only']
 
 DICT_PARAMS = {
     'market' : PARAMS_ORDER_MARKET, 
@@ -119,14 +119,44 @@ DATA_TP_SL = {
             "algoType": "TAKE_PROFIT",
             "type": "CLOSE_POSITION",
             "side": "{side}",
-            "reduceOnly": 'true',
+            "reduceOnly": "{reduce_only}",
             "triggerPrice": "{tp_price}"
         },
         {
             "algoType": "STOP_LOSS",
             "type": "CLOSE_POSITION",
             "side": "{side}",
-            "reduceOnly": 'true',
+            "reduceOnly": "{reduce_only}",
+            "triggerPrice": "{sl_price}"
+        }
+    ]
+}
+
+DATA_TP = {
+    "symbol": "{symbol}",
+    "reduceOnly": 'false',
+    "algoType": "POSITIONAL_TP_SL",
+    "childOrders": [
+        {
+            "algoType": "TAKE_PROFIT",
+            "type": "CLOSE_POSITION",
+            "side": "{side}",
+            "reduceOnly": "{reduce_only}",
+            "triggerPrice": "{tp_price}"
+        }
+    ]
+}
+
+DATA_SL = {
+    "symbol": "{symbol}",
+    "reduceOnly": 'false',
+    "algoType": "POSITIONAL_TP_SL",
+    "childOrders": [
+        {
+            "algoType": "STOP_LOSS",
+            "type": "CLOSE_POSITION",
+            "side": "{side}",
+            "reduceOnly": '{reduce_only}',
             "triggerPrice": "{sl_price}"
         }
     ]
@@ -140,6 +170,8 @@ DICT_DATA = {
     'cancel-stop' : DATA_ORDER_CANCEL_STOP, 
     
     'stop' : DATA_ORDER_STOP,
+    'tp' : DATA_TP,
+    'sl' : DATA_SL,
     'tp-sl' : DATA_TP_SL
     }
 

@@ -5,8 +5,6 @@ from classes import API_Account, RequestLog
 import handle_variables as var_handler
 import time
 
-
-
 app = Flask(__name__)
 app.secret_key = config.WEBHOOK_TOKEN
 
@@ -65,34 +63,38 @@ def webhook():
         # Generate Request Object From Payload
         account_name = _account.getName()
         try:
-            payload_response, list_request = f_gen.payload_to_request(_account, payload, timestamp)
-            
+            general_list_requests = f_gen.generate_request(_account, payload, timestamp)
 
         except Exception as e:
             return f_gen.generate_error('Unknown Error : ' + str(e))
 
-        # End The Process with any error in the payload
-        if 'ERROR' in payload_response:
-            # Create Log Object, and Store it
-            var_handler.add_log(RequestLog(timestamp, payload, payload_response))
-            return f_gen.generate_error(payload_response)
+        for (index, payload_request) in enumerate(general_list_requests):
+            payload_response, list_request = payload_request
 
-        # Send Requests for each account and Receive Responses
-        responses = []
+            # End The Process with any error in the payload
+            if 'ERROR' in payload_response:
+                # Create Log Object, and Store it
+                var_handler.add_log(RequestLog(timestamp, payload, payload_response))
+                return f_gen.generate_error(payload_response)
 
-        for object_request in list_request:
-            [request_type , request_url_path, request_header, request_data] = object_request.getData()
+            # Send Requests for each account and Receive Responses
+            responses = []
 
-            response = f_gen.send_request(request_type, request_url_path, request_header, request_data)
+            for object_request in list_request:
+                [request_type , request_url_path, request_header, request_data] = object_request.getData()
 
-            var_handler.add_log(RequestLog(timestamp, payload, response.json()))
-            responses.append(response)
+                response = f_gen.send_request(request_type, request_url_path, request_header, request_data)
+
+                var_handler.add_log(RequestLog(timestamp, payload, response.json()))
+                responses.append(response)
+            
+            # Add Response to all_responses, Key is the Account Name
+            all_responses[f"Payload {index}: {account_name}"] = responses
+
+            # 
+            time.sleep(1)
         
-        # Add Response to all_responses, Key is the Account Name
-        all_responses[account_name] = responses
-
-        # 
-        time.sleep(1)
+        
 
     base_response = {
         'Status' : 'Request Sent Successfully'  
