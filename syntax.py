@@ -1,5 +1,6 @@
 import config
 
+CONST_LEVERAGE = ['1', '2', '3', '4', '5', '10', '15', '20']
 CONST_TYPES = ['market', 'limit', 'close', 'cancel-limit', 'cancel-stop', 'cancel-all', 'stop', 'tp-sl']
 CONST_SIDE = ['BUY', 'SELL']
 
@@ -26,13 +27,13 @@ DICT_URL = {
 
 
 # REQUIRED PARAMETERS
-PARAMS_ORDER_MARKET = ['symbol', 'side', 'quantity']
-PARAMS_ORDER_LIMIT = ['symbol', 'side', 'price', 'quantity']
+PARAMS_ORDER_MARKET = ['symbol', 'side', 'quantity', 'leverage', 'is_percentage']
+PARAMS_ORDER_LIMIT = ['symbol', 'side', 'price', 'quantity', 'leverage', 'is_percentage']
 PARAMS_POSITION_CLOSE = ['symbol', 'side', 'quantity']
 PARAMS_ORDER_CANCEL_LIMIT = ['symbol']
 
 PARAMS_ORDER_CANCEL_STOP = ['symbol', 'side']
-PARAMS_ORDER_STOP = ['symbol', 'side', 'price', 'quantity']
+PARAMS_ORDER_STOP = ['symbol', 'side', 'price', 'quantity', 'leverage', 'is_percentage']
 PARAMS_ORDER_TP_SL = ['symbol', 'tp', 'sl', 'side', 'reduce_only']
 
 DICT_PARAMS = {

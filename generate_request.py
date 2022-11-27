@@ -3,9 +3,81 @@ import hashlib
 import datetime
 import json
 import requests
+import math
 
 from classes import API_Account, PayloadRequest
 from syntax import *
+
+def get_account_info(_account : API_Account, value : str):
+    account_key = _account.getKey()
+    account_secret = _account.getSecret()
+
+    timestamp = generate_timestamp()
+    _message = f'|{timestamp}'
+    signature = generate_signature(_message, account_secret)
+    data = {}
+
+    headers = {
+    'x-api-timestamp': f'{timestamp}',
+    'x-api-key': f'{account_key}',
+    'x-api-signature': f'{signature}', 
+    'Content-Type': 'application/x-www-form-urlencoded', 'Cache-Control':'no-cache' 
+    } 
+    
+    if value == 'USDT Holding':
+        response = requests.get('https://api.woo.org/v1/client/holding', headers=headers, data=data)
+        return response.json()['holding']['USDT']
+    
+    if value == 'leverage':
+        response = requests.get('https://api.woo.org/v1/client/info', headers=headers, data=data)
+        return response.json()['application']['leverage']
+
+def get_latest_price(_account : API_Account, symbol : str):
+    account_key = _account.getKey()
+    account_secret = _account.getSecret()
+
+    timestamp = generate_timestamp()
+    _message = f'limit=1&symbol={symbol}&type=1m|{timestamp}'
+    signature = generate_signature(_message, account_secret)
+
+    headers = {
+        'x-api-timestamp': f'{timestamp}',
+        'x-api-key': f'{account_key}',
+        'x-api-signature': f'{signature}',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Cache-Control':'no-cache'
+    }
+    response = requests.get(f'https://api.woo.org/v1/kline?limit=1&symbol={symbol}&type=1m', headers=headers )
+
+    try:
+        return response.json()['rows'][0]['close']
+    except Exception as e:
+        return e
+
+def get_min_tick(symbol : str):
+    response = requests.get(f'https://api.woo.org/v1/public/info/{symbol}')
+    return int(abs(math.log10(response.json()['info']['base_tick'])))
+
+def set_leverage(_account : API_Account, leverage): 
+    account_key = _account.getKey()
+    account_secret = _account.getSecret()
+
+    timestamp = generate_timestamp()
+    _message = 'leverage={leverage}|{timestamp}'.format(leverage=leverage, timestamp=timestamp)
+    signature = generate_signature(_message, account_secret)
+    data = { 
+    'leverage': f'{leverage}'
+    }
+
+    headers = {
+    'x-api-timestamp': f'{timestamp}',
+    'x-api-key': f'{account_key}',
+    'x-api-signature': f'{signature}', 
+    'Content-Type': 'application/x-www-form-urlencoded', 'Cache-Control':'no-cache' 
+    } 
+
+    response = requests.post('https://api.woo.org/v1/client/leverage', headers=headers, data=data)
+    return response.json()['success']
 
 def generate_request(_account : API_Account , _payload : str, _timestamp : str):
     list_payload = payload_handler(_payload)
@@ -244,6 +316,12 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
                     .format(side=payload_dict[_param])
                 return (response_message, None)
             
+            # Check if valid argument has been passed for 'leverage' parameter
+            if (_param == 'leverage') and (payload_dict[_param] not in CONST_LEVERAGE):
+                response_message = 'ERROR (Invalid Arguments Passed) : \'{leverage}\' argument passed for \'leverage\' parameter is not valid/recognized.'\
+                    .format(leverage=payload_dict[_param])
+                return (response_message, None)
+            
             _required_params[_param] = payload_dict[_param]
     #endregion
 
@@ -258,12 +336,26 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
         _symbol = _required_params['symbol']
         _side = _required_params['side']
         _order_quantity = _required_params['quantity']
+        _leverage = _required_params['leverage']
+        _percentage = _required_params['is_percentage']
+
+        # First : Update the Leverage Settings
+        set_leverage(_account, _leverage)
+
+        # Next : Calculate Quantity Amount
+        if _percentage == 'TRUE':
+            current_holding = get_account_info(_account, 'USDT Holding')
+            current_price = get_latest_price(_account, _symbol)
+
+            _order_quantity = round((current_holding * (float(_order_quantity) / 100)) / current_price, get_min_tick(_symbol))
 
         data.update(
             symbol = _symbol,
             side = _side,
             order_quantity = _order_quantity
             )
+
+        print('Last', _order_quantity)
 
         _normal_body = _normal_body.format(symbol=_symbol, side=_side, order_quantity=_order_quantity)
         _normal_body = '{message}{timestamp}'.format(message=_normal_body, timestamp=_timestamp)
@@ -273,6 +365,18 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
         _side = _required_params['side']
         _order_price = _required_params['price']
         _order_quantity = _required_params['quantity']
+        _leverage = _required_params['leverage']
+        _percentage = _required_params['is_percentage']
+
+        # First : Update the Leverage Settings
+        set_leverage(_account, _leverage)
+
+        # Next : Calculate Quantity Amount
+        if _percentage == 'TRUE':
+            current_holding = get_account_info(_account, 'USDT Holding')
+            current_price = get_latest_price(_account, _symbol)
+
+            _order_quantity = round((current_holding * (float(_order_quantity) / 100)) / current_price, get_min_tick(_symbol))
 
         data.update(
             symbol = _symbol,
@@ -326,6 +430,18 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
         _side = _required_params['side']
         _price = _required_params['price']
         _quantity = _required_params['quantity']
+        _leverage = _required_params['leverage']
+        _percentage = _required_params['is_percentage']
+
+        # First : Update the Leverage Settings
+        set_leverage(_account, _leverage)
+
+        # Next : Calculate Quantity Amount
+        if _percentage == 'TRUE':
+            current_holding = get_account_info(_account, 'USDT Holding')
+            current_price = get_latest_price(_account, _symbol)
+
+            _order_quantity = round((current_holding * (float(_order_quantity) / 100)) / current_price, get_min_tick(_symbol))
 
         data.update(
             symbol = _symbol,

@@ -135,7 +135,15 @@
               <span class="syntax-code">cancel-stop</span> |
               <span class="syntax-code">cancel-all</span> |
               <span class="syntax-code">tp-sl</span>
-            </dd>
+            </dd><br>
+
+            <dt >--> <span class="syntax-code">leverage</span>: (required for Market, Limit and Stop Market Orders)</dt>
+            <dd>The leverage parameter has fixed values, which are <em>1, 2, 3, 4, 5, 10, 15 and 20</em></dd><br>
+
+            <dt >--> <span class="syntax-code">is_percentage</span>: (required for Market, Limit and Stop Market Orders)</dt>
+            <dd>Possible Value:
+              <span class="syntax-code">true</span> |
+              <span class="syntax-code">false</span>
 
             <dt style="margin-top: 10px;">--> <span class="syntax-code">side</span>:</dt>
             <dd>Possible Value:
@@ -169,7 +177,7 @@
           <strong>Market Order</strong> <br>
           <p style="margin-top: 10px;">
             <span class="syntax-code">token='abcd1234', type='market', symbol='PERP_BTC_USDT', side='buy',
-              quantity=1000</span>
+              leverage=5, is_percentage='false', quantity=1000</span>
           </p>
         </div>
 
@@ -177,7 +185,7 @@
           <strong>Limit Order</strong> <br>
           <p style="margin-top: 10px;">
             <span class="syntax-code">token='abcd1234', type='limit', symbol='PERP_BTC_USDT', side='buy', price=2500,
-              quantity=1000</span>
+              leverage=5, is_percentage='false', quantity=1000</span>
           </p>
         </div>
 
@@ -185,7 +193,7 @@
           <strong>Stop-Market Order</strong> <br>
           <p style="margin-top: 10px;">
             <span class="syntax-code">token='abcd1234', type='stop', symbol='PERP_BTC_USDT', side='buy', price=2500,
-              quantity=1000</span>
+              leverage=5, is_percentage='false', quantity=1000</span>
           </p>
         </div>
 
@@ -234,6 +242,8 @@
         <div></div>
 
         <div class="full_screen">
+          <br>
+
           <p>You can merge two or more alerts, by separating them with a semicolon (<em>:</em>). For example:</p>
           <p><span class="syntax-code">token='abcd1234', type='market', symbol='PERP_BTC_USDT', side='buy',
             quantity=1000; token='abcd1234', type='limit', symbol='PERP_BTC_USDT', side='buy', price=2500,
