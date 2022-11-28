@@ -441,7 +441,7 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
             current_holding = get_account_info(_account, 'USDT Holding')
             current_price = get_latest_price(_account, _symbol)
 
-            _order_quantity = round((current_holding * (float(_order_quantity) / 100)) / current_price, get_min_tick(_symbol))
+            _quantity = round((current_holding * (float(_quantity) / 100)) / current_price, get_min_tick(_symbol))
 
         data.update(
             symbol = _symbol,

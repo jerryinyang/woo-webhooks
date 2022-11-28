@@ -1,4 +1,12 @@
 timestamp|command|response
+1669675815559|token='passcode', type='cancel_all', symbol='PERP_ETH_USDT', quantity=100, side='buy', price=1175, leverage=5, is_percentage='true'|Response [Payload 0: main] : <Response [200]>
+1669675815559|token='passcode', type='cancel_all', symbol='PERP_ETH_USDT', quantity=100, side='buy', price=1175, leverage=5, is_percentage='true'|{'success': True, 'data': {'status': 'CANCEL_ALL_SENT', 'side': 'BUY'}, 'timestamp': 1669675817334}
+1669675815559|token='passcode', type='cancel_all', symbol='PERP_ETH_USDT', quantity=100, side='buy', price=1175, leverage=5, is_percentage='true'|{'success': True, 'status': 'CANCEL_ALL_SENT'}
+1669675795489|token='passcode', type='stop', symbol='PERP_ETH_USDT', quantity=100, side='buy', price=1175, leverage=5, is_percentage='true'|Response [Payload 0: main] : <Response [200]>
+1669675795489|token='passcode', type='stop', symbol='PERP_ETH_USDT', quantity=100, side='buy', price=1175, leverage=5, is_percentage='true'|{'success': True, 'data': {'rows': [{'orderId': 429395, 'clientOrderId': 0, 'algoType': 'STOP_LOSS', 'quantity': 0.027}]}, 'timestamp': 1669675799396}
+1669675694362|token='passcode', type='stop', symbol='PERP_ETH_USDT', side='buy', price=1175, leverage=5, is_percentage='true'|ERROR (Missing Required Parameter) : 'stop' order requires a 'quantity' argument.
+1669675681930|token='passcode', type='stop', symbol='PERP_ETH_USDT', side='buy', price=1175, leverage=5, is_percentage='true', quantity=100|ERROR (Missing Required Parameter) : 'stop' order requires a 'quantity' argument.
+1669675669681|token='passcode', type='stop', symbol='PERP_ETH_USDT', side='buy', price=1175, leverage=5, is_percentage='true', quantity=100|ERROR (Missing Required Parameter) : 'stop' order requires a 'quantity' argument.
 1669574777904|token='passcode', type='market', symbol='PERP_ETH_USDT', side='buy', quantity=0.038, leverage=5, is_percentage='false'|Response [Payload 0: main] : <Response [200]>
 1669574777904|token='passcode', type='market', symbol='PERP_ETH_USDT', side='buy', quantity=0.038, leverage=5, is_percentage='false'|{'success': True, 'timestamp': '1669574779.782', 'order_id': 181694258, 'order_type': 'MARKET', 'order_price': None, 'order_quantity': 0.038, 'order_amount': None, 'client_order_id': 0}
 1669574183130|token='passcode', type='market', symbol='PERP_ETH_USDT', side='buy', quantity=0.038, leverage=5, is_percentage=false|Response [Payload 0: main] : <Response [200]>
