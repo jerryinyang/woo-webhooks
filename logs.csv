@@ -1,4 +1,11 @@
 timestamp|command|response
+1669811044906|token='passcode', type='tp-sl', symbol='PERP_BTC_USDT, side='buy', tp=0, sl=17000, reduce_only='true'|Response [Payload 0: main] : <Response [200]>
+1669811044906|token='passcode', type='tp-sl', symbol='PERP_BTC_USDT, side='buy', tp=0, sl=17000, reduce_only='true'|{'success': True, 'data': {'rows': [{'orderId': 437011, 'clientOrderId': 0, 'algoType': 'TAKE_PROFIT', 'quantity': 0}, {'orderId': 437012, 'clientOrderId': 0, 'algoType': 'STOP_LOSS', 'quantity': 0}, {'orderId': 437010, 'clientOrderId': 0, 'algoType': 'POSITIONAL_TP_SL', 'quantity': 0}]}, 'timestamp': 1669811046230}
+1669810959906|token='passcode', type='tp-sl', symbol='PERP_BTC_USDT, side='sell', tp=0, sl=17000, reduce_only='true'|Response [Payload 0: main] : <Response [400]>
+1669810959906|token='passcode', type='tp-sl', symbol='PERP_BTC_USDT, side='sell', tp=0, sl=17000, reduce_only='true'|{'success': False, 'code': -1103, 'message': 'The stop loss trigger price is invalid.'}
+1669810801481|token='passcode', type='market', symbol='PERP_BTC_USDT', side='buy', leverage=5, is_percentage='true', quantity=100, reduce_only=true|Response [Payload 0: main] : <Response [200]>
+1669810801481|token='passcode', type='market', symbol='PERP_BTC_USDT', side='buy', leverage=5, is_percentage='true', quantity=100, reduce_only=true|{'success': True, 'timestamp': '1669810806.149', 'order_id': 181996853, 'order_type': 'MARKET', 'order_price': None, 'order_quantity': 0.0046, 'order_amount': None, 'client_order_id': 0}
+1669810786192|token='passcode', type='market', symbol='PERP_BTC_USDT', side='buy', leverage=5, is_percentage='true', quantity=100|ERROR (Missing Required Parameter) : 'market' order requires a 'reduce_only' argument.
 1669675815559|token='passcode', type='cancel_all', symbol='PERP_ETH_USDT', quantity=100, side='buy', price=1175, leverage=5, is_percentage='true'|Response [Payload 0: main] : <Response [200]>
 1669675815559|token='passcode', type='cancel_all', symbol='PERP_ETH_USDT', quantity=100, side='buy', price=1175, leverage=5, is_percentage='true'|{'success': True, 'data': {'status': 'CANCEL_ALL_SENT', 'side': 'BUY'}, 'timestamp': 1669675817334}
 1669675815559|token='passcode', type='cancel_all', symbol='PERP_ETH_USDT', quantity=100, side='buy', price=1175, leverage=5, is_percentage='true'|{'success': True, 'status': 'CANCEL_ALL_SENT'}

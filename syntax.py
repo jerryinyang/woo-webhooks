@@ -27,13 +27,13 @@ DICT_URL = {
 
 
 # REQUIRED PARAMETERS
-PARAMS_ORDER_MARKET = ['symbol', 'side', 'quantity', 'leverage', 'is_percentage']
-PARAMS_ORDER_LIMIT = ['symbol', 'side', 'price', 'quantity', 'leverage', 'is_percentage']
+PARAMS_ORDER_MARKET = ['symbol', 'side', 'quantity', 'leverage', 'is_percentage', 'reduce_only']
+PARAMS_ORDER_LIMIT = ['symbol', 'side', 'price', 'quantity', 'leverage', 'is_percentage', 'reduce_only']
 PARAMS_POSITION_CLOSE = ['symbol', 'side', 'quantity']
 PARAMS_ORDER_CANCEL_LIMIT = ['symbol']
 
-PARAMS_ORDER_CANCEL_STOP = ['symbol', 'side']
-PARAMS_ORDER_STOP = ['symbol', 'side', 'price', 'quantity', 'leverage', 'is_percentage']
+PARAMS_ORDER_CANCEL_STOP = ['symbol', 'side', 'reduce_only']
+PARAMS_ORDER_STOP = ['symbol', 'side', 'price', 'quantity', 'leverage', 'is_percentage','reduce_only']
 PARAMS_ORDER_TP_SL = ['symbol', 'tp', 'sl', 'side', 'reduce_only']
 
 DICT_PARAMS = {
@@ -49,8 +49,8 @@ DICT_PARAMS = {
 
 
 # NORMALIZED MESSAGE
-NORMAL_ORDER_MARKET = "order_quantity={order_quantity}&order_type=MARKET&side={side}&symbol={symbol}|"
-NORMAL_ORDER_LIMIT = "order_price={order_price}&order_quantity={order_quantity}&order_type=LIMIT&side={side}&symbol={symbol}|"
+NORMAL_ORDER_MARKET = "order_quantity={order_quantity}&order_type=MARKET&reduceOnly={reduce_only}&side={side}&symbol={symbol}|"
+NORMAL_ORDER_LIMIT = "order_price={order_price}&order_quantity={order_quantity}&order_type=LIMIT&reduceOnly={reduce_only}&side={side}&symbol={symbol}|"
 NORMAL_POSITION_CLOSE = "order_quantity={order_quantity}&order_type=MARKET&side={side}&symbol={symbol}|"
 NORMAL_ORDER_CANCEL_LIMIT = "symbol={symbol}|"
 
@@ -75,6 +75,7 @@ DATA_ORDER_MARKET = {
     'order_quantity': 0, 
     'order_type': 'MARKET',
     'side': '{side}',
+    "reduceOnly": "{reduce_only}",
     'symbol': '{symbol}'
     }
 
@@ -83,6 +84,7 @@ DATA_ORDER_LIMIT = {
     'order_quantity': 0, 
     'order_type': 'LIMIT',
     'side':'{side}',
+    "reduceOnly": "{reduce_only}",
     'symbol': '{symbol}'
     } 
 
@@ -108,6 +110,7 @@ DATA_ORDER_STOP = {
     "algoType":"STOP",
     "triggerPrice":"{price}",
     "type":"MARKET",
+    "reduceOnly": "{reduce_only}",
     "quantity":"{quantity}"
     }
 

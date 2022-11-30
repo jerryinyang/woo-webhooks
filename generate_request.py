@@ -338,6 +338,7 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
         _order_quantity = _required_params['quantity']
         _leverage = _required_params['leverage']
         _percentage = _required_params['is_percentage']
+        _reduce = _required_params['reduce_only'].lower()
 
         # First : Update the Leverage Settings
         set_leverage(_account, _leverage)
@@ -352,12 +353,13 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
         data.update(
             symbol = _symbol,
             side = _side,
-            order_quantity = _order_quantity
+            order_quantity = _order_quantity,
+            reduceOnly = _reduce
             )
 
         print('Last', _order_quantity)
 
-        _normal_body = _normal_body.format(symbol=_symbol, side=_side, order_quantity=_order_quantity)
+        _normal_body = _normal_body.format(symbol=_symbol, side=_side, order_quantity=_order_quantity, reduce_only=_reduce)
         _normal_body = '{message}{timestamp}'.format(message=_normal_body, timestamp=_timestamp)
 
     elif _type == 'limit' :
@@ -367,6 +369,7 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
         _order_quantity = _required_params['quantity']
         _leverage = _required_params['leverage']
         _percentage = _required_params['is_percentage']
+        _reduce = _required_params['reduce_only'].lower()
 
         # First : Update the Leverage Settings
         set_leverage(_account, _leverage)
@@ -382,10 +385,11 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
             symbol = _symbol,
             side = _side,
             order_price = _order_price,
-            order_quantity = _order_quantity
+            order_quantity = _order_quantity,
+            reduceOnly = _reduce
             )
 
-        _normal_body = _normal_body.format(symbol=_symbol, side=_side, order_price=_order_price, order_quantity=_order_quantity)
+        _normal_body = _normal_body.format(symbol=_symbol, side=_side, order_price=_order_price, order_quantity=_order_quantity, reduce_only=_reduce)
         _normal_body = '{message}{timestamp}'.format(message=_normal_body, timestamp=_timestamp)
 
     elif _type == 'close' :
@@ -432,6 +436,7 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
         _quantity = _required_params['quantity']
         _leverage = _required_params['leverage']
         _percentage = _required_params['is_percentage']
+        _reduce = _required_params['reduce_only'].lower()
 
         # First : Update the Leverage Settings
         set_leverage(_account, _leverage)
@@ -447,7 +452,8 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
             symbol = _symbol,
             side = _side,
             triggerPrice = _price,
-            quantity = _quantity
+            quantity = _quantity,
+            reduceOnly = _reduce
             )
         data = json.dumps(data)
 
@@ -455,9 +461,9 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
         _normal_body = '{timestamp}{message}'.format(message=_normal_body, timestamp=_timestamp)
 
     elif _type == 'tp-sl' :
+        _side = _required_params['side']
 
-
-        _side = 'BUY' if (_required_params['side'] == 'sell') else 'SELL'
+        print(_required_params['side'] )
 
         _symbol = _required_params['symbol']
         _tp = _required_params['tp']
