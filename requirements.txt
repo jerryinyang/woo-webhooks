@@ -2,3 +2,5 @@ flask
 gunicorn
 requests
 pandas
+asyncio
+aiohttp
