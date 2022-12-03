@@ -373,10 +373,8 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
             symbol = _symbol,
             side = _side,
             order_quantity = _order_quantity,
-            reduceOnly = _reduce
+            reduce_only = _reduce
             )
-
-        print('Last', _order_quantity)
 
         _normal_body = _normal_body.format(symbol=_symbol, side=_side, order_quantity=_order_quantity, reduce_only=_reduce)
         _normal_body = '{message}{timestamp}'.format(message=_normal_body, timestamp=_timestamp)
@@ -405,7 +403,7 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
             side = _side,
             order_price = _order_price,
             order_quantity = _order_quantity,
-            reduceOnly = _reduce
+            reduce_only = _reduce
             )
 
         _normal_body = _normal_body.format(symbol=_symbol, side=_side, order_price=_order_price, order_quantity=_order_quantity, reduce_only=_reduce)

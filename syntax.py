@@ -75,7 +75,7 @@ DATA_ORDER_MARKET = {
     'order_quantity': 0, 
     'order_type': 'MARKET',
     'side': '{side}',
-    "reduceOnly": "{reduce_only}",
+    "reduce_only": "{reduce_only}",
     'symbol': '{symbol}'
     }
 
@@ -84,7 +84,7 @@ DATA_ORDER_LIMIT = {
     'order_quantity': 0, 
     'order_type': 'LIMIT',
     'side':'{side}',
-    "reduceOnly": "{reduce_only}",
+    "reduce_only": "{reduce_only}",
     'symbol': '{symbol}'
     } 
 
