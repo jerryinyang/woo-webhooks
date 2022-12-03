@@ -4,9 +4,29 @@ import datetime
 import json
 import requests
 import math
+import asyncio
+import aiohttp
 
 from classes import API_Account, PayloadRequest
 from syntax import *
+
+def get_tasks(session, list_request):
+    tasks = []
+
+    for object_request in list_request:
+        [request_type , request_url_path, request_header, request_data] = object_request.getData()
+        tasks.append(send_request(session, request_type, request_url_path, request_header, request_data))
+    return tasks
+
+async def get_responses(_list, _store, _identifier):
+    _responses = []
+    async with aiohttp.ClientSession() as session:
+        tasks = get_tasks(session, _list)
+        
+        responses = await asyncio.gather(*tasks)
+        for response in responses:
+            _responses.append(await response.json())
+    _store[_identifier] = _responses
 
 def get_account_info(_account : API_Account, value : str):
     account_key = _account.getKey()
@@ -88,11 +108,10 @@ def generate_request(_account : API_Account , _payload : str, _timestamp : str):
 
     return list_request
 
-def send_request(_type, url, headers, data):
+def send_request(session, _type, url, headers, data):
     if (_type == 'cancel-all') or (_type == 'cancel-limit') or (_type == 'cancel-stop'):
-        return requests.delete(url, headers=headers, data=data)
-    
-    return requests.post(url, headers=headers, data=data)
+        return session.delete(url, headers=headers, data=data, ssl=False)
+    return session.post(url, headers=headers, data=data, ssl=False)
 
 def generate_error(message):
     return {

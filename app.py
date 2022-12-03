@@ -3,7 +3,7 @@ import generate_request as f_gen
 from flask import Flask, request, render_template, flash
 from classes import API_Account, RequestLog
 import handle_variables as var_handler
-import time
+import asyncio
 
 app = Flask(__name__)
 app.secret_key = config.WEBHOOK_TOKEN
@@ -52,22 +52,18 @@ def webhook():
 
     # Fetch All API Accounts
     accounts, _ = var_handler.get_accounts()
-    list_accounts = []
     all_responses = {}
     
-    for _account in accounts:
-        _name, _key, _secret = _account
-        list_accounts.append(API_Account(_name, _key, _secret))
+    for _user in accounts:
+        _name, _key, _secret = _user
+        _account = API_Account(_name, _key, _secret)
 
-    for _account in list_accounts: 
-        # Generate Request Object From Payload
-        account_name = _account.getName()
+        # Generate Request Objects From Payload
         try:
             general_list_requests = f_gen.generate_request(_account, payload, timestamp)
-
         except Exception as e:
             return f_gen.generate_error('Unknown Error : ' + str(e))
-
+        
         for (index, payload_request) in enumerate(general_list_requests):
             payload_response, list_request = payload_request
 
@@ -78,23 +74,7 @@ def webhook():
                 return f_gen.generate_error(payload_response)
 
             # Send Requests for each account and Receive Responses
-            responses = []
-
-            for object_request in list_request:
-                [request_type , request_url_path, request_header, request_data] = object_request.getData()
-
-                response = f_gen.send_request(request_type, request_url_path, request_header, request_data)
-
-                var_handler.add_log(RequestLog(timestamp, payload, response.json()))
-                responses.append(response)
-            
-            # Add Response to all_responses, Key is the Account Name
-            all_responses[f"Payload {index}: {account_name}"] = responses
-
-            # 
-            time.sleep(1)
-        
-        
+            asyncio.run(f_gen.get_responses(list_request, all_responses, f"Payload {index}: {_name}"))
 
     base_response = {
         'Status' : 'Request Sent Successfully'  
@@ -106,7 +86,7 @@ def webhook():
 
         for message in responses:
             response.update([
-            ('API Response', message.json()),
+            ('API Response', message),
         ])
         
         var_handler.add_log(RequestLog(timestamp, payload, f'Response [{account}] : ' + str(message)))
