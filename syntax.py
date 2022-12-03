@@ -49,8 +49,8 @@ DICT_PARAMS = {
 
 
 # NORMALIZED MESSAGE
-NORMAL_ORDER_MARKET = "order_quantity={order_quantity}&order_type=MARKET&reduceOnly={reduce_only}&side={side}&symbol={symbol}|"
-NORMAL_ORDER_LIMIT = "order_price={order_price}&order_quantity={order_quantity}&order_type=LIMIT&reduceOnly={reduce_only}&side={side}&symbol={symbol}|"
+NORMAL_ORDER_MARKET = "order_quantity={order_quantity}&order_type=MARKET&reduce_only={reduce_only}&side={side}&symbol={symbol}|"
+NORMAL_ORDER_LIMIT = "order_price={order_price}&order_quantity={order_quantity}&order_type=LIMIT&reduce_only={reduce_only}&side={side}&symbol={symbol}|"
 NORMAL_POSITION_CLOSE = "order_quantity={order_quantity}&order_type=MARKET&side={side}&symbol={symbol}|"
 NORMAL_ORDER_CANCEL_LIMIT = "symbol={symbol}|"
 
