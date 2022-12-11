@@ -1,7 +1,8 @@
 import config
 
 CONST_LEVERAGE = ['1', '2', '3', '4', '5', '10', '15', '20']
-CONST_TYPES = ['market', 'limit', 'close', 'cancel-limit', 'cancel-stop', 'cancel-all', 'stop', 'tp-sl']
+CONST_TYPES = ['market', 'limit', 'close', 'cancel-limit', 'cancel-stop', 'cancel-all', 'stop', 'tp-sl', 
+  'change-token', 'forgot-token']
 CONST_SIDE = ['BUY', 'SELL']
 
 # URL 
@@ -36,6 +37,9 @@ PARAMS_ORDER_CANCEL_STOP = ['symbol', 'side', 'reduce_only']
 PARAMS_ORDER_STOP = ['symbol', 'side', 'price', 'quantity', 'leverage', 'is_percentage','reduce_only']
 PARAMS_ORDER_TP_SL = ['symbol', 'tp', 'sl', 'side', 'reduce_only']
 
+PARAMS_CHANGE_TOKEN = ['new-token', 'confirm_token']
+PARAMS_FORGOT_TOKEN = ['master_token']
+
 DICT_PARAMS = {
     'market' : PARAMS_ORDER_MARKET, 
     'limit' : PARAMS_ORDER_LIMIT, 
@@ -44,7 +48,9 @@ DICT_PARAMS = {
     'cancel-stop': PARAMS_ORDER_CANCEL_STOP, 
 
     'stop' : PARAMS_ORDER_STOP,
-    'tp-sl' : PARAMS_ORDER_TP_SL
+    'tp-sl' : PARAMS_ORDER_TP_SL,
+    'change-token' : PARAMS_CHANGE_TOKEN, 
+    'forgot-token' : PARAMS_FORGOT_TOKEN
     }
 
 

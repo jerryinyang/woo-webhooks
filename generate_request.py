@@ -119,6 +119,12 @@ def generate_error(message):
         "message" : message
     }
 
+def generate_management(message):
+    return {
+        "code" : "Success",
+        "message" : message
+    }
+
 def generate_timestamp():
     timenow = datetime.datetime.now()
     return str(int(1000 * timenow.timestamp()))
@@ -220,9 +226,12 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
     _token  = payload_dict['token'].lower()
     
     # ERROR: Check if token matches the stored token
-    if _token != config.WEBHOOK_TOKEN:
-        response_message = 'ERROR (Wrong Authentication Token) : Wrong Authentication Token.'
-        return response_message, None
+    if _token != config.Webhook_Token:
+        if _token == 'reset':
+            pass
+        else:
+            response_message = f'ERROR (Wrong Authentication Token) : Wrong Authentication Token.'
+            return response_message, None
     #endregion
 
     #region ----- Confirm Payload Type
@@ -342,6 +351,33 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
                 return (response_message, None)
             
             _required_params[_param] = payload_dict[_param]
+    #endregion
+
+    #region ----- Change and Retrieve Token
+    # MANAGEMENT : if _type is equal to 'change-token'
+    if _type == 'change-token':
+        _new_token = _required_params['new_token']
+        _confirm_token = _required_params['confirm_token']
+
+        if _new_token == _confirm_token:
+            config.Webhook_Token = _new_token
+            response_message = 'MANAGEMENT : Authentication Token Updated.'
+        else:
+            response_message = 'ERROR : New Token and Confirm Token do not match.'
+        
+        return (response_message, None)
+    
+    if _type == 'forgot-token':
+        _master_token = _required_params['master_token']
+
+        if (_master_token == config.MASTER_1.upper()):
+            response_message = f'MANAGEMENT : Current Token is : {config.Webhook_Token}'
+            return (response_message, None)
+        else:
+            response_message = f'MANAGEMENT : You don\'t have the authorization for this command.'
+            return (response_message, None)
+        
+    
     #endregion
 
     #region ----- Generate Request Body and Normalised Body
@@ -532,7 +568,6 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
     response_message = 'SUCCESS : Request Generated Successfully.'
     request = PayloadRequest(_type, url_path, header, data, _timestamp)
     return (response_message, [request])
-
 
 
 

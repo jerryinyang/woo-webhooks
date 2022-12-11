@@ -6,7 +6,7 @@ import handle_variables as var_handler
 import asyncio
 
 app = Flask(__name__)
-app.secret_key = config.WEBHOOK_TOKEN
+app.secret_key = config.Webhook_Token
 
 @app.route("/", methods=['GET', 'POST'])
 def hello_world():
@@ -16,7 +16,7 @@ def hello_world():
     if request.method == 'POST':
         password = request.form.get('password', False)
 
-        if password:
+        if password == app.secret_key:
             account_name = request.form.get('account_name', False)
             api_key = request.form.get('api_key', False)
             api_secret = request.form.get('api_secret', False)
@@ -72,6 +72,12 @@ def webhook():
                 # Create Log Object, and Store it
                 var_handler.add_log(RequestLog(timestamp, payload, payload_response))
                 return f_gen.generate_error(payload_response)
+            
+            # End The Process when Password is changed
+            if 'MANAGEMENT' in payload_response:
+                # Create Log Object, and Store it
+                var_handler.add_log(RequestLog(timestamp, payload, payload_response))
+                return f_gen.generate_management(payload_response)
 
             # Send Requests for each account and Receive Responses
             asyncio.run(f_gen.get_responses(list_request, all_responses, f"Payload {index}: {_name}"))

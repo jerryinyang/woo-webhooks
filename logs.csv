@@ -1,4 +1,71 @@
 timestamp|command|response
+1670772764605|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master_token='$FE5ID51673M9HP735VXD6J214UXWJT2KN64CQ3VGLOZ21K58K'|MANAGEMENT : Current Token is : 6l7Bb3aCJ1OyCDXd
+1670772753379|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master_token='password'|MANAGEMENT : You don't have the authorization for this command.
+1670772743798|token='passcode', type='change-token', new-token='67890', confirm-token='67890', master_token='password'|ERROR (Wrong Authentication Token) : Wrong Authentication Token.
+1670772358249|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master_token='password'|MANAGEMENT : Current Token is : passcode
+1670772280925|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master_token='password'|MANAGEMENT : You don't have the authorization for this command. PASSWORD , password
+1670772224851|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master_token='password'|MANAGEMENT : You don't have the authorization for this command. password
+1670772216234|token='asda', type='forgot-token', new-token='67890', confirm-token='67890', master_token='password'|ERROR (Wrong Authentication Token) : Wrong Authentication Token.
+1670772074311|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master_token='password'|MANAGEMENT : You don't have the authorization for this command. password
+1670772068405|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master_token='passcode'|MANAGEMENT : You don't have the authorization for this command. password
+1670771849156|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master_token='passcode'|MANAGEMENT : You don't have the authorization for this command. password
+1670771842166|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='passcode'|ERROR (Missing Required Parameter) : 'forgot-token' order requires a 'master_token' argument.
+1670771724402|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='passcode'|MANAGEMENT : You don't have the authorization for this command. password
+1670771718338|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='password'|MANAGEMENT : You don't have the authorization for this command. password
+1670771718035|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='password'|MANAGEMENT : You don't have the authorization for this command. password
+1670771717555|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='password'|MANAGEMENT : You don't have the authorization for this command. password
+1670771716718|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='password'|MANAGEMENT : You don't have the authorization for this command. password
+1670771715538|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='password'|MANAGEMENT : You don't have the authorization for this command. password
+1670771694499|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='password'|MANAGEMENT : You don't have the authorization for this command. password
+1670771668588|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='password'|MANAGEMENT : You don't have the authorization for this command. password
+1670771638839|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', maser-token=password|ERROR (Missing Required Parameter) : 'forgot-token' order requires a 'master-token' argument.
+1670771617264|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token=password|MANAGEMENT : You don't have the authorization for this command. password
+1670771616219|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token=password|MANAGEMENT : You don't have the authorization for this command. password
+1670771610742|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='password'|MANAGEMENT : You don't have the authorization for this command. password
+1670771597507|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='password'|MANAGEMENT : Current Token is : passcode
+1670771587509|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='password'|MANAGEMENT : Current Token is : passcode
+1670771531265|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='password'|MANAGEMENT : You don't have the authorization for this command. password
+1670771472373|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='password'|MANAGEMENT : You don't have the authorization for this command.
+1670771449870|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='aasdfghjkl'|MANAGEMENT : You don't have the authorization for this command.
+1670771402850|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='aasdfghjkl'|MANAGEMENT : You don't have the authorization for this command.
+1670771382485|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='asdfghjkl'|MANAGEMENT : You don't have the authorization for this command.
+1670771077437|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='Km0_GUu4e'w-cpydVr];U@Hdlo1T;.p^{9sbM$K`MN08W;=A5E'|MANAGEMENT : You don't have the authorization for this command.
+1670771064954|token='reset', type='forgot-token', new-token='67890', confirm-token='67890'|ERROR (Missing Required Parameter) : 'forgot-token' order requires a 'master-token' argument.
+1670771060640|token='passcode', type='forgot-token', new-token='67890', confirm-token='67890'|ERROR (Wrong Authentication Token) : Wrong Authentication Token.
+1670771052788|token='passcode', type='change-token', new-token='67890', confirm-token='67890'|MANAGEMENT : Authentication Token Updated.
+1670771019778|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='Km0_GUu4e'w-cpydVr];U@Hdlo1T;.p^{9sbM$K`MN08W;=A5E'|MANAGEMENT : You don't have the authorization for this command.
+1670770999410|token='reset', type='forgot-token', new-token='67890', confirm-token='67890', master-token='j#rWx2yyQgVLIf_!IQ[)12LW7!WD+O+lf1IVM9HOBx3n+lI2!#'|MANAGEMENT : You don't have the authorization for this command.
+1670770970308|token='reset', type='forgot-token', new-token='67890', confirm-token='67890'|ERROR (Missing Required Parameter) : 'forgot-token' order requires a 'master-token' argument.
+1670770965904|token='passcode', type='forgot-token', new-token='67890', confirm-token='67890'|ERROR (Wrong Authentication Token) : Wrong Authentication Token.
+1670770961015|token='passcode', type='change-token', new-token='67890', confirm-token='67890'|ERROR (Wrong Authentication Token) : Wrong Authentication Token.
+1670770958758|token='passcode', type='change-token', new-token='67890', confirm-token='67890'|MANAGEMENT : Authentication Token Updated.
+1670770940978|token='passcode', type='forgot-token', new-token='67890', confirm-token='67890'|ERROR (Missing Required Parameter) : 'forgot-token' order requires a 'master-token' argument.
+1670770758835|token='passcode', type='forgot-token', new-token='67890', confirm-token='67890'|ERROR (Wrong Authentication Token) : Wrong Authentication Token.
+1670770750363|token='passcode', type='change-token', new-token='67890', confirm-token='67890'|ERROR (Wrong Authentication Token) : Wrong Authentication Token.
+1670770745956|token='passcode', type='change-token', new-token='67890', confirm-token='67890'|MANAGEMENT : Authentication Token Updated.
+1670770734851|token='12345', type='change-token', new-token='67890', confirm-token='67890'|ERROR (Wrong Authentication Token) : Wrong Authentication Token.
+1670769473806|token='12345', type='change-token', new-token='67890', confirm-token='67890'|ERROR (Wrong Authentication Token) : Wrong Authentication Token. passcode
+1670769452730|token='12345', type='change-token', new-token='67890', confirm-token='67890'|MANAGEMENT : Authentication Token Updated.
+1670769446318|token='12345', type='change-token', new-token='12345', confirm-token='67890'|ERROR : New Token and Confirm Token do not match.
+1670769430649|token='passcode', type='change-token', new-token='12345', confirm-token='12345'|MANAGEMENT : Authentication Token Updated.
+1670769425240|token='asdas', type='change-token', new-token='12345', confirm-token='12345'|ERROR (Wrong Authentication Token) : Wrong Authentication Token. passcode
+1670768352050|token='password', type='change-token', new-token='12345', confirm-token='12345'|ERROR (Wrong Authentication Token) : Wrong Authentication Token. 12345
+1670768336456|token='passcode', type='change-token', new-token='12345', confirm-token='12345'|MANAGEMENT : Authentication Token Updated.
+1670768322048|token='password', type='change-token', new-token='passcode', confirm-token='password'|ERROR (Wrong Authentication Token) : Wrong Authentication Token. passcode
+1670768200513|token='password', type='change-token', new-token='passcode', confirm-token='password'|ERROR (Wrong Authentication Token) : Wrong Authentication Token.
+1670768193160|token='passcode', type='change-token', new-token='passcode', confirm-token='password'|ERROR (Wrong Authentication Token) : Wrong Authentication Token.
+1670768184812|token='passcode', type='change-token', new-token='password', confirm-token='password'|ERROR (Wrong Authentication Token) : Wrong Authentication Token.
+1670768169823|token='password', type='change-token', new-token='password', confirm-token='password'|ERROR (Wrong Authentication Token) : Wrong Authentication Token.
+1670768162359|token='passcode', type='change-token', new-token='password', confirm-token='password'|ERROR (Wrong Authentication Token) : Wrong Authentication Token.
+1670768142669|token='passcode', type='change-token', new-token='password', confirm-token='password'|MANAGEMENT : Authentication Token Updated.
+1670768121909|token='passcode', type='change-token', new-token='password', confirm-token='passcode'|ERROR : New Token and Confirm Token do not match.
+1670768107172|token='passcode', type='change-token', new-token='password', confirm-token='passcode'|ERROR : New Token and COnfirm Token do not match.
+1670768091001|token='passcode', type='change-token', new-token='password'|ERROR (Missing Required Parameter) : 'change-token' order requires a 'confirm-token' argument.
+1670768061307|token='passcode', typE='change-token'|ERROR (Missing Required Parameter) : 'change-token' order requires a 'new-token' argument.
+1670768054632|token='passcode', typE='change-token', |ERROR (Cannot Read Alert Message) :             Make sure your alert message is written and punctuated correctly.
+1670767983603|token='passcode', typE='change-token'|ERROR (Missing Required Parameter) : 'change-token' order requires a 'new-token' argument.
+1670767977848|token='passcode', typE='change-password'|ERROR (Invalid Arguments Passed) : 'change-password' argument passed for 'type' parameter is not valid/recognized.
+1670767952375|token='passcode'|ERROR (Missing Required Parameter) : 'type' parameter is not defined.
 1670037371929|token='passcode', type='stop', symbol='PERP_BTC_USDT', side='buy', price=18000, leverage=5, is_percentage='false', quantity=1000, reduce_only='true';token='passcode', type='stop', symbol='PERP_BTC_USDT', side='buy', price=18000, leverage=5, is_percentage='false', quantity=1000, reduce_only='true'|Response [Payload 1: main] : {'success': False, 'code': -1003, 'message': 'You have exceeded the rate limit. Please try again in 1 seconds.'}
 1670037371929|token='passcode', type='stop', symbol='PERP_BTC_USDT', side='buy', price=18000, leverage=5, is_percentage='false', quantity=1000, reduce_only='true';token='passcode', type='stop', symbol='PERP_BTC_USDT', side='buy', price=18000, leverage=5, is_percentage='false', quantity=1000, reduce_only='true'|Response [Payload 0: main] : {'success': True, 'data': {'rows': [{'orderId': 449935, 'clientOrderId': 0, 'algoType': 'STOP_LOSS', 'quantity': 1000}]}, 'timestamp': 1670037384131}
 1670037308985|token='passcode', type='limit', symbol='PERP_ETH_USDT', side='buy', price=900, leverage=5, is_percentage='false', quantity=1000, reduce_only='true';token='passcode', type='stop', symbol='PERP_BTC_USDT', side='buy', price=18000, leverage=5, is_percentage='false', quantity=1000, reduce_only='true'|Response [Payload 1: main] : {'success': True, 'data': {'rows': [{'orderId': 449928, 'clientOrderId': 0, 'algoType': 'STOP_LOSS', 'quantity': 1000}]}, 'timestamp': 1670037322842}
