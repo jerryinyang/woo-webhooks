@@ -76,7 +76,7 @@ def webhook():
             # End The Process when Password is changed
             if 'MANAGEMENT' in payload_response:
                 # Create Log Object, and Store it
-                var_handler.add_log(RequestLog(timestamp, payload, payload_response))
+                var_handler.add_log(RequestLog(timestamp, payload, payload_response), True)
                 return f_gen.generate_management(payload_response)
 
             # Send Requests for each account and Receive Responses

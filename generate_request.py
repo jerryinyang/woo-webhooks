@@ -223,11 +223,11 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
         response_message = 'ERROR (Payload Not Authenticated) : \'token\' parameter is required to authenticate payload.'
         return (response_message, None)
     
-    _token  = payload_dict['token'].lower()
+    _token  = payload_dict['token']
     
     # ERROR: Check if token matches the stored token
-    if _token != config.Webhook_Token:
-        if _token == 'reset':
+    if _token != config.Webhook_Token.upper():
+        if _token == 'RESET':
             pass
         else:
             response_message = f'ERROR (Wrong Authentication Token) : Wrong Authentication Token.'
@@ -376,8 +376,6 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
         else:
             response_message = f'MANAGEMENT : You don\'t have the authorization for this command.'
             return (response_message, None)
-        
-    
     #endregion
 
     #region ----- Generate Request Body and Normalised Body

@@ -48,8 +48,9 @@ def get_accounts():
         list_accounts_safe.sort()
     return list_accounts, list_accounts_safe
 
-def add_log(log : RequestLog):
-    logs = pd.read_csv('logs.csv', sep='|')
+def add_log(log : RequestLog, management=False):
+    log_file = 'logs.csv' if (not management) else 'management_logs.csv'
+    logs = pd.read_csv(log_file, sep='|')
     
     new_log = log.getLog()
     timestamp = new_log['timestamp'] 
@@ -63,7 +64,7 @@ def add_log(log : RequestLog):
     })
 
     logs = pd.concat([new_log, logs], axis=0, ignore_index=True)
-    logs.to_csv('logs.csv', index=False, sep='|')
+    logs.to_csv(log_file, index=False, sep='|')
     
     return 
 
