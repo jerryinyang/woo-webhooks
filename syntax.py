@@ -37,7 +37,7 @@ PARAMS_ORDER_CANCEL_STOP = ['symbol', 'side', 'reduce_only']
 PARAMS_ORDER_STOP = ['symbol', 'side', 'price', 'quantity', 'leverage', 'is_percentage','reduce_only']
 PARAMS_ORDER_TP_SL = ['symbol', 'tp', 'sl', 'side', 'reduce_only']
 
-PARAMS_CHANGE_TOKEN = ['new-token', 'confirm_token']
+PARAMS_CHANGE_TOKEN = ['new_token', 'confirm_token']
 PARAMS_FORGOT_TOKEN = ['master_token']
 
 DICT_PARAMS = {
