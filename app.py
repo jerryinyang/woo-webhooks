@@ -1,12 +1,39 @@
-import json, config
+import json
 import generate_request as f_gen 
-from flask import Flask, request, render_template, flash
-from classes import API_Account, RequestLog
 import handle_variables as var_handler
 import asyncio
+from classes import API_Account, RequestLog
+from config import Config as config
+from datetime import datetime
+from flask import Flask, request, render_template
+from flask_sqlalchemy import SQLAlchemy
+
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = config.Webhook_Token
+app.app_context().push()
+
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    api_name = db.Column(db.String(50), unique=True)
+    api_key = db.Column(db.String(50))
+    api_secret = db.Column(db.String(50))
+
+    def __repr__(self) -> str:
+        return f"<User : {self.api_name}>"
+
+class Log(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    timestamp = db.Column(db.Integer)
+    command = db.Column(db.String(1000))
+    response = db.Column(db.String(1000))
+
+    def __repr__(self) -> str:
+        return f"<User : {self.response}>"
 
 @app.route("/", methods=['GET', 'POST'])
 def hello_world():

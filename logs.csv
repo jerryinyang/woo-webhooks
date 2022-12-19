@@ -1,2 +1,5 @@
 timestamp|command|response
+1671488675095|token='6l7Bb3aCJ1OyCDXd', type='change-tsoken', new_token='12345'|ERROR (Invalid Arguments Passed) : 'change-tsoken' argument passed for 'type' parameter is not valid/recognized.
+1671406625360|token='6l7Bb3aCJ1OyCDXd', type='change-tsoken', new_token='12345'|ERROR (Invalid Arguments Passed) : 'change-tsoken' argument passed for 'type' parameter is not valid/recognized.
+1671406025136|token='6l7Bb3aCJ1OyCDXd', type='change-tsoken', new_token='12345'|ERROR (Invalid Arguments Passed) : 'change-tsoken' argument passed for 'type' parameter is not valid/recognized.
 1670036385121|token='passcode', type='limit', symbol='PERP_BTC_USDT', side='buy', price=15000, leverage=5, is_percentage='true', quantity=50, reduce_only='true'|{'success': True, 'timestamp': '1670036397.630', 'order_id': 182201834, 'order_type': 'LIMIT', 'order_price': 15000, 'order_quantity': 0.0022, 'order_amount': None, 'client_order_id': 0}

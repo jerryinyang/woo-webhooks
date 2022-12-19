@@ -1,4 +1,4 @@
-import config
+from config import Config as config
 
 CONST_LEVERAGE = ['1', '2', '3', '4', '5', '10', '15', '20']
 CONST_TYPES = ['market', 'limit', 'close', 'cancel-limit', 'cancel-stop', 'cancel-all', 'stop', 'tp-sl', 
