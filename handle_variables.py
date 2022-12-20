@@ -1,4 +1,5 @@
 import pandas as pd
+import os.path
 import sqlite3
 from datetime import datetime
 from classes import RequestLog
@@ -73,35 +74,42 @@ def get_logs():
     return list_logs[:20]
 
 def SQL_ManageAccount(action, api_name, api_key, api_secret):
-    connection = sqlite3.connect('instance\db.sqlite3')
-    cursor = connection.cursor()
 
-    _add = f"INSERT INTO user (api_name, api_key, api_secret) VALUES ('{api_name}', '{api_key}', '{api_secret}')"
-    _delete =f"DELETE FROM user WHERE api_name='{api_name}'"
-    
-    if action == 'add':
-        cursor.execute(_add)
-        connection.commit()
-        return True
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(BASE_DIR, "instance\db.sqlite3")
 
-    elif action == 'remove':
-        cursor.execute(_delete)
-        connection.commit()
-        return True
+    with sqlite3.connect(db_path) as connection:
+        cursor = connection.cursor()
 
-    elif action == 'get':
-        return pd.read_sql_query("SELECT * FROM user", connection)
+        _add = f"INSERT INTO user (api_name, api_key, api_secret) VALUES ('{api_name}', '{api_key}', '{api_secret}')"
+        _delete =f"DELETE FROM user WHERE api_name='{api_name}'"
+        
+        if action == 'add':
+            cursor.execute(_add)
+            connection.commit()
+            return True
+
+        elif action == 'remove':
+            cursor.execute(_delete)
+            connection.commit()
+            return True
+
+        elif action == 'get':
+            return pd.read_sql_query("SELECT * FROM user", connection)
 
 def SQL_ManageLog(action, timestamp, command, response):
-    connection = sqlite3.connect('instance\db.sqlite3')
-    cursor = connection.cursor()
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    db_path = os.path.join(BASE_DIR, "instance\db.sqlite3")
+    
+    with sqlite3.connect(db_path) as connection:
+        cursor = connection.cursor()
 
-    _add = f"INSERT INTO log (timestamp, command, response) VALUES (?,?,?)"
+        _add = f"INSERT INTO log (timestamp, command, response) VALUES (?,?,?)"
 
-    if action == 'add':
-        cursor.execute(_add, (timestamp, command, response))
-        connection.commit()
-        return True
+        if action == 'add':
+            cursor.execute(_add, (timestamp, command, response))
+            connection.commit()
+            return True
 
-    if action == 'get':
-        return pd.read_sql_query("SELECT * FROM log ORDER BY timestamp DESC", connection)
+        if action == 'get':
+            return pd.read_sql_query("SELECT * FROM log ORDER BY timestamp DESC", connection)
