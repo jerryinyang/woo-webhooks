@@ -1,4 +1,5 @@
 import json
+import os
 import generate_request as f_gen 
 import handle_variables as var_handler
 import asyncio
@@ -10,7 +11,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = config.Webhook_Token
 app.app_context().push()
