@@ -9,9 +9,14 @@ from datetime import datetime
 from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 
+uri = os.environ.get('DATABASE_URL')
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = uri
+
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = config.Webhook_Token
 app.app_context().push()
