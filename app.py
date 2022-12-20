@@ -5,16 +5,11 @@ import handle_variables as var_handler
 import asyncio
 from classes import API_Account, RequestLog
 from config import Config as config
-from datetime import datetime
 from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 
-uri = os.environ.get('DATABASE_URL')
-if uri.startswith("postgres://"):
-    uri = uri.replace("postgres://", "postgresql://", 1)
-
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = uri
+app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
 
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

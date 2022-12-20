@@ -11,8 +11,8 @@ class Config:
     MASTER_1 = "$DNXPJ4FSFIPABAEC957DXG9MKJ62I5EJ392A8HZIBX1P2VQT2L"
     MASTER_2 = "#XD16AEVJ7B1TY9Y7ZWR6DANNXV4CF19LSDXYOQLWZAEJPMCS6U"
 
-    uri = os.environ.get('DATABASE_URL')
-    if uri.startswith("postgres://"):
-        uri = uri.replace("postgres://", "postgresql://", 1)
+    # uri = os.environ.get('DATABASE_URL')
+    # if uri.startswith("postgres://"):
+    #     uri = uri.replace("postgres://", "postgresql://", 1)
 
-    SQLALCHEMY_DATABASE_URI = uri # os.environ.get('DATABASE_URL') #'sqlite:///db.sqlite3'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///db.sqlite3' # os.environ.get('DATABASE_URL') #'sqlite:///db.sqlite3'

@@ -5,34 +5,13 @@ from classes import RequestLog
 from config import Config as config
     
 def add_account(name : str, api_key : str, api_secret : str):
-    accounts = pd.read_csv('accounts.csv', sep=',')
-    
-    if name in accounts['api_name'].unique():
-        return f'Account with that name ({name}) already exists.'
-
-    new_account = pd.DataFrame({
-        'api_name' : [name], 
-        'api_key' : [api_key], 
-        'api_secret' : [api_secret]
-    })
-    accounts = pd.concat([accounts, new_account], axis=0, ignore_index=True)
-    accounts.to_csv('accounts.csv', index=False)
-
-    # Add Account Into SQL Database
+     # Add Account Into SQL Database
     SQL_ManageAccount('add', name, api_key, api_secret)
     
     return f'Account ({name}) added.'
 
 def remove_account(name : str):
-    accounts = pd.read_csv('accounts.csv', sep=',')
-
-    if name not in accounts['api_name'].unique():
-        return f'Account with that name ({name}) does not exist.'
-
-    accounts = accounts[accounts['api_name'] != name]
-    accounts.to_csv('accounts.csv', index=False)
-
-    # Add Account Into SQL Database
+    # Remove Account From SQL Database
     SQL_ManageAccount('remove', name, '', '')
 
     return f'Account ({name}) removed.'
@@ -58,30 +37,27 @@ def get_accounts():
     return list_accounts, list_accounts_safe
 
 def add_log(log : RequestLog, management=False):
-    log_file = 'logs.csv' if (not management) else 'management_logs.csv'
-    logs = pd.read_csv(log_file, sep='|')
-    
     new_log = log.getLog()
     timestamp = new_log['timestamp'] 
     command = new_log['command'] 
     response = new_log['response'] 
 
-    new_log = pd.DataFrame({
-        'timestamp' : [timestamp], 
-        'command' : [command], 
-        'response' : [response]
-    })
+    if management:
+        logs = pd.read_csv('management_logs.csv', sep='|')
 
-    logs = pd.concat([new_log, logs], axis=0, ignore_index=True)
-    logs.to_csv(log_file, index=False, sep='|')
+        new_log_df = pd.DataFrame({
+            'timestamp' : [timestamp], 
+            'command' : [command], 
+            'response' : [response]
+        })
+
+        logs = pd.concat([new_log_df, logs], axis=0, ignore_index=True)
+        logs.to_csv('management_logs.csv', index=False, sep='|')
 
     SQL_ManageLog('add', timestamp, command, response)
-    
-    return 
 
 def get_logs():
     logs = SQL_ManageLog('get', '', '', '')
-    # logs['timestamp'] = pd.to_datetime(logs['timestamp'], unit='s') # Convert Integer timestamp to datetime
 
     dict_logs = logs.to_dict()
 
@@ -102,20 +78,18 @@ def SQL_ManageAccount(action, api_name, api_key, api_secret):
 
     _add = f"INSERT INTO user (api_name, api_key, api_secret) VALUES ('{api_name}', '{api_key}', '{api_secret}')"
     _delete =f"DELETE FROM user WHERE api_name='{api_name}'"
-
-    sql = _add if action.lower() == 'add' else _delete
     
     if action == 'add':
         cursor.execute(_add)
         connection.commit()
         return True
 
-    if action == 'remove':
+    elif action == 'remove':
         cursor.execute(_delete)
         connection.commit()
         return True
 
-    if action == 'get':
+    elif action == 'get':
         return pd.read_sql_query("SELECT * FROM user", connection)
 
 def SQL_ManageLog(action, timestamp, command, response):
