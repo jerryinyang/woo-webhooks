@@ -4,20 +4,27 @@ import sqlite3
 from datetime import datetime
 from classes import RequestLog
 from config import Config as config
+import Google as drive
+import asyncio
     
 def add_account(name : str, api_key : str, api_secret : str):
-     # Add Account Into SQL Database
+    download_database()
+    # Add Account Into SQL Database
     SQL_ManageAccount('add', name, api_key, api_secret)
-    
+
+    update_database()
     return f'Account ({name}) added.'
 
 def remove_account(name : str):
+    download_database()
     # Remove Account From SQL Database
     SQL_ManageAccount('remove', name, '', '')
 
+    update_database()
     return f'Account ({name}) removed.'
 
 def get_accounts():
+    download_database()
     accounts = SQL_ManageAccount('get', '', '', '')
     dict_accounts = accounts.to_dict()
 
@@ -34,10 +41,10 @@ def get_accounts():
 
         list_accounts.sort()
         list_accounts_safe.sort()
-        
     return list_accounts, list_accounts_safe
 
 def add_log(log : RequestLog, management=False):
+    download_database()
     new_log = log.getLog()
     timestamp = new_log['timestamp'] 
     command = new_log['command'] 
@@ -56,8 +63,10 @@ def add_log(log : RequestLog, management=False):
         logs.to_csv('management_logs.csv', index=False, sep='|')
 
     SQL_ManageLog('add', timestamp, command, response)
+    update_database()
 
 def get_logs():
+    download_database()
     logs = SQL_ManageLog('get', '', '', '')
 
     dict_logs = logs.to_dict()
@@ -113,3 +122,11 @@ def SQL_ManageLog(action, timestamp, command, response):
 
         if action == 'get':
             return pd.read_sql_query("SELECT * FROM log ORDER BY timestamp DESC", connection)
+
+def download_database():
+    service = asyncio.run(drive.Create_Service())
+    asyncio.run(drive.Download_File(service, config.DRIVE_FILE_NAME))
+
+def update_database():
+    service = asyncio.run(drive.Create_Service())
+    asyncio.run(drive.Upload_File(service, config.DRIVE_FOLDER_NAME, config.DRIVE_FILE_NAME, './instance/db.sqlite3', 'sqlite3'))

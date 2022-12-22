@@ -38,6 +38,7 @@ class Log(db.Model):
 
 @app.route("/", methods=['GET', 'POST'])
 def hello_world():
+    
     _, accounts_safe = var_handler.get_accounts()
     logs = var_handler.get_logs()
 

@@ -1,16 +1,13 @@
-from handle_variables import SQL_ManageLog
-import pandas as pd
-import sqlite3
+from Google import *
+import asyncio
 
-x = SQL_ManageLog('get', '', '', '')
+service = asyncio.run(Create_Service())
 
-_delete =f"DELETE FROM user WHERE api_name='testName2'"
+if service is not None:
+    # print(asyncio.run(Create_Folder(service, 'Test Folder')))
+    # print(Search_File(service, 'Test Folder'))
+    print(asyncio.run(Upload_File(service, 'Test Folder', 'db', './instance/db.sqlite3', 'sqlite3')))
+    # print(asyncio.run(Download_File(service, 'db.sqlite3')))
 
-    
-connection = sqlite3.connect('instance\db.sqlite3')
-cursor = connection.cursor()
 
-cursor.execute(_delete)
-connection.commit()
-
-print(pd.read_sql_query("SELECT * FROM user", connection))
+    pass
