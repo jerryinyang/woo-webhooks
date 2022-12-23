@@ -6,25 +6,23 @@ from classes import RequestLog
 from config import Config as config
 import Google as drive
 import asyncio
+import shutil
     
 def add_account(name : str, api_key : str, api_secret : str):
-    download_database()
     # Add Account Into SQL Database
-    SQL_ManageAccount('add', name, api_key, api_secret)
+    if SQL_ManageAccount('add', name, api_key, api_secret):
+        asyncio.run(query_database('upload', 'add account', name, api_key, api_secret, None, None, None, "instance\drive_db.sqlite3"))
 
-    update_database()
     return f'Account ({name}) added.'
 
 def remove_account(name : str):
-    download_database()
     # Remove Account From SQL Database
-    SQL_ManageAccount('remove', name, '', '')
+    if SQL_ManageAccount('remove', name, '', ''):
+        asyncio.run(query_database('upload', 'remove account', name, None, None, None, None, None, "instance\drive_db.sqlite3"))
 
-    update_database()
     return f'Account ({name}) removed.'
 
 def get_accounts():
-    download_database()
     accounts = SQL_ManageAccount('get', '', '', '')
     dict_accounts = accounts.to_dict()
 
@@ -41,10 +39,11 @@ def get_accounts():
 
         list_accounts.sort()
         list_accounts_safe.sort()
+    
+    asyncio.run(query_database('download', None, None, None, None, None, None, None, None))
     return list_accounts, list_accounts_safe
 
 def add_log(log : RequestLog, management=False):
-    download_database()
     new_log = log.getLog()
     timestamp = new_log['timestamp'] 
     command = new_log['command'] 
@@ -62,11 +61,10 @@ def add_log(log : RequestLog, management=False):
         logs = pd.concat([new_log_df, logs], axis=0, ignore_index=True)
         logs.to_csv('management_logs.csv', index=False, sep='|')
 
-    SQL_ManageLog('add', timestamp, command, response)
-    update_database()
+    if SQL_ManageLog('add', timestamp, command, response):
+        asyncio.run(query_database('upload', 'add log', '', '', '', timestamp, command, response, "instance\drive_db.sqlite3"))
 
 def get_logs():
-    download_database()
     logs = SQL_ManageLog('get', '', '', '')
 
     dict_logs = logs.to_dict()
@@ -80,12 +78,16 @@ def get_logs():
 
         list_logs.append((datetime.fromtimestamp(int(timestamp/1000)).strftime('%Y-%m-%d %H:%M:%S'),
          command, response))
+    
+    asyncio.run(query_database('download', None, None, None, None, None, None, None, None))
     return list_logs[:20]
 
-def SQL_ManageAccount(action, api_name, api_key, api_secret):
+def SQL_ManageAccount(action, api_name, api_key, api_secret, path : str = None):
 
+    _path = path if path is not None else "instance\db.sqlite3"
+    
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    db_path = os.path.join(BASE_DIR, "instance\db.sqlite3")
+    db_path = os.path.join(BASE_DIR, _path)
 
     with sqlite3.connect(db_path) as connection:
         cursor = connection.cursor()
@@ -106,9 +108,11 @@ def SQL_ManageAccount(action, api_name, api_key, api_secret):
         elif action == 'get':
             return pd.read_sql_query("SELECT * FROM user", connection)
 
-def SQL_ManageLog(action, timestamp, command, response):
+def SQL_ManageLog(action, timestamp, command, response, path : str = None):
+    _path = path if path is not None else "instance\db.sqlite3"
+
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    db_path = os.path.join(BASE_DIR, "instance\db.sqlite3")
+    db_path = os.path.join(BASE_DIR, _path)
     
     with sqlite3.connect(db_path) as connection:
         cursor = connection.cursor()
@@ -123,10 +127,25 @@ def SQL_ManageLog(action, timestamp, command, response):
         if action == 'get':
             return pd.read_sql_query("SELECT * FROM log ORDER BY timestamp DESC", connection)
 
-def download_database():
-    service = asyncio.run(drive.Create_Service())
-    asyncio.run(drive.Download_File(service, config.DRIVE_FILE_NAME))
+async def query_database(query_action : str, task_action : str, name, api_key, api_secret, \
+    timestamp, command, response, path):  
+  
+    service = await asyncio.create_task(drive.Create_Service())
+    await asyncio.create_task(drive.Download_File(service, config.DRIVE_FILE_NAME))
+    
+    # Update Drive Database
+    if query_action == 'upload':
+        if task_action == 'add account':
+            SQL_ManageAccount('add', name, api_key, api_secret, path)
+        elif task_action == 'remove account':
+            SQL_ManageAccount('remove', name, '', '', path)
+        elif task_action == 'add log':
+            SQL_ManageLog('add', timestamp, command, response, path)
 
-def update_database():
-    service = asyncio.run(drive.Create_Service())
-    asyncio.run(drive.Upload_File(service, config.DRIVE_FOLDER_NAME, config.DRIVE_FILE_NAME, './instance/db.sqlite3', 'sqlite3'))
+        asyncio.create_task(drive.Upload_File(service, config.DRIVE_FOLDER_NAME, config.DRIVE_FILE_NAME, \
+            F'./instance/{config.DRIVE_FILE_NAME}', 'sqlite3'))
+
+    # Update Local Database
+    elif query_action == 'download':
+        # Update Local Version using the Drive Version
+        shutil.copyfile(F'./instance/{config.DRIVE_FILE_NAME}', './instance/db.sqlite3')

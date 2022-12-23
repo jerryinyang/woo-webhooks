@@ -9,7 +9,7 @@ from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -38,7 +38,7 @@ class Log(db.Model):
 
 @app.route("/", methods=['GET', 'POST'])
 def hello_world():
-    
+
     _, accounts_safe = var_handler.get_accounts()
     logs = var_handler.get_logs()
 
