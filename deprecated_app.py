@@ -1,15 +1,40 @@
 import json
+import os
 import generate_request as f_gen 
 import handle_variables as var_handler
 import asyncio
 from classes import API_Account, RequestLog
 from config import Config as config
 from flask import Flask, request, render_template
-import time
-import pandas as pd
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
+
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = config.Webhook_Token
+app.app_context().push()
+
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    api_name = db.Column(db.String(50), unique=True)
+    api_key = db.Column(db.String(50))
+    api_secret = db.Column(db.String(50))
+
+    def __repr__(self) -> str:
+        return f"<User : {self.api_name}>"
+
+class Log(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    timestamp = db.Column(db.Integer)
+    command = db.Column(db.String(1000))
+    response = db.Column(db.String(1000))
+
+    def __repr__(self) -> str:
+        return f"<User : {self.response}>"
 
 @app.route("/", methods=['GET', 'POST'])
 def hello_world():
@@ -96,19 +121,13 @@ def webhook():
 
         for message in responses:
             response.update([
-            ('API Response', message)
+            ('API Response', message),
         ])
         
         var_handler.add_log(RequestLog(timestamp, payload, f'Response [{account}] : ' + str(message)))
 
-        # Update External Database
-        update_start_time = time.time()
-        asyncio.run(var_handler.update_database())
-        update_duration = time.time() - update_start_time
-
         base_response.update([
-            (f'Response [{account}]', response),
-            (f'Database Update Time', update_duration)
+            (f'Response [{account}]', response)
         ])
 
     return base_response
