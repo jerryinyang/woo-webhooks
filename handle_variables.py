@@ -108,8 +108,8 @@ async def update_database():
     # Save Merged Documents
     df_accounts_merged.to_csv('./database/accounts.csv', index=False)
     df_accounts_merged.to_csv('./database/drive_accounts.csv', index=False)
-    df_logs_merged.to_csv('./database/logs.csv', index=False)
-    df_logs_merged.to_csv('./database/drive_logs.csv', index=False)
+    df_logs_merged.to_csv('./database/logs.csv', index=False, sep='|')
+    df_logs_merged.to_csv('./database/drive_logs.csv', index=False, sep='|')
     
     # Upload Updated Database
     upload_accounts = asyncio.create_task(drive.Upload_File(service, config.DRIVE_FOLDER_NAME, config.DRIVE_FILE_NAME_ACCOUNTS, \
@@ -122,4 +122,3 @@ async def update_database():
 
 def merge_df(df1, df2):
     return pd.concat([df1, df2]).drop_duplicates()
-
