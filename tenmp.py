@@ -20,5 +20,7 @@ if service is not None:
 
 # print(df3)
 
-accounts = pd.read_csv('./database/accounts.csv', sep=',')
-accounts.to_csv('dddfff.csv', index=False)
+# asyncio.run(Download_File(service, config.DRIVE_FILE_NAME_ACCOUNTS))
+
+# asyncio.run(Upload_File(service, config.DRIVE_FOLDER_NAME, config.DRIVE_FILE_NAME_ACCOUNTS, \
+#         f'./database/{config.DRIVE_FILE_NAME_ACCOUNTS}', 'csv'))

@@ -6,7 +6,6 @@ from classes import API_Account, RequestLog
 from config import Config as config
 from flask import Flask, request, render_template
 import time
-import pandas as pd
 
 app = Flask(__name__)
 app.secret_key = config.Webhook_Token
@@ -26,12 +25,12 @@ def hello_world():
             api_secret = request.form.get('api_secret', False)
 
             if account_name:
-                var_handler.add_account(account_name, api_key, api_secret)
+                asyncio.run(var_handler.add_account(account_name, api_key, api_secret))
 
             remove_name = request.form.get('remove_name', False)
 
             if remove_name:
-                var_handler.remove_account(remove_name)
+                asyncio.run(var_handler.remove_account(remove_name))
         
         # Update the Accounts List
         logs = var_handler.get_logs()
@@ -49,7 +48,7 @@ def webhook():
     try:
         payload=json.loads(payload)
     except Exception as e:
-        return f_gen.generate_error('Unknown Error : '  + str(e))
+        return f_gen.generate_error('Unknown Error from recieved payload : '  + str(e))
 
     # Create Timestamp and Account Object
     timestamp = f_gen.generate_timestamp()
@@ -66,7 +65,7 @@ def webhook():
         try:
             general_list_requests = f_gen.generate_request(_account, payload, timestamp)
         except Exception as e:
-            return f_gen.generate_error('Unknown Error : ' + str(e))
+            return f_gen.generate_error('Unknown Error Generating Request : ' + str(e))
         
         for (index, payload_request) in enumerate(general_list_requests):
             payload_response, list_request = payload_request
@@ -76,6 +75,22 @@ def webhook():
                 # Create Log Object, and Store it
                 var_handler.add_log(RequestLog(timestamp, payload, payload_response))
                 return f_gen.generate_error(payload_response)
+
+            if payload_response == 'DATABASE UPDATE REQUEST':
+
+                try: 
+                    # Update External Database
+                    update_start_time = time.time()
+                    asyncio.run(var_handler.update_database())
+                    update_duration = time.time() - update_start_time
+
+                    return {
+                        "code" : "Successful",
+                        "message" : "Database Updated Successfully",
+                        "Update Time Duration" : f'{update_duration}'
+                    }
+                except Exception as e:
+                    return f_gen.generate_error('Unknown Error With Database Update: ' + str(e))
             
             # End The Process when Password is changed
             if 'MANAGEMENT' in payload_response:
@@ -101,14 +116,8 @@ def webhook():
         
         var_handler.add_log(RequestLog(timestamp, payload, f'Response [{account}] : ' + str(message)))
 
-        # Update External Database
-        update_start_time = time.time()
-        asyncio.run(var_handler.update_database())
-        update_duration = time.time() - update_start_time
-
         base_response.update([
-            (f'Response [{account}]', response),
-            (f'Database Update Time', update_duration)
+            (f'Response [{account}]', response)
         ])
 
     return base_response

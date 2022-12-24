@@ -250,6 +250,11 @@ def payload_to_request(_account : API_Account , _payload : str, _timestamp : str
         return (response_message, None)
     #endregion
 
+    # MANAGEMENT: If type is 'update-database'
+    if _type == 'update-database':
+        response_message = 'DATABASE UPDATE REQUEST'
+        return (response_message, None)
+
     #region ----- Alternative Algorithm For Multiple Cancels
     if _type == 'cancel-all':
         list_type = ['cancel-limit', 'cancel-stop']

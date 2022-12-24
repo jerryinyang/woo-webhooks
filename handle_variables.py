@@ -6,8 +6,12 @@ from config import Config as config
 import Google as drive
 import asyncio
     
-def add_account(name : str, api_key : str, api_secret : str):
-    accounts = pd.read_csv('./database/accounts.csv', sep=',')
+async def add_account(name : str, api_key : str, api_secret : str):
+    # Download the .csv files from Google Drive
+    service = await asyncio.create_task(drive.Create_Service())
+    await asyncio.create_task(drive.Download_File(service, config.DRIVE_FILE_NAME_ACCOUNTS))
+
+    accounts = pd.read_csv(f'./database/{config.DRIVE_FILE_NAME_ACCOUNTS}', sep=',')
     
     if name in accounts['api_name'].unique():
         return f'Account with that name ({name}) already exists.'
@@ -17,19 +21,35 @@ def add_account(name : str, api_key : str, api_secret : str):
         'api_key' : [api_key], 
         'api_secret' : [api_secret]
     })
+
+    # Update Local Version
     accounts = pd.concat([accounts, new_account], axis=0, ignore_index=True)
     accounts.to_csv('./database/accounts.csv', index=False)
+    accounts.to_csv(f'./database/{config.DRIVE_FILE_NAME_ACCOUNTS}', index=False)
+
+    # Upload Changes to Drive
+    await asyncio.create_task(drive.Upload_File(service, config.DRIVE_FOLDER_NAME, config.DRIVE_FILE_NAME_ACCOUNTS, \
+        f'./database/{config.DRIVE_FILE_NAME_ACCOUNTS}', 'csv'))
     
     return f'Account ({name}) added.'
 
-def remove_account(name : str):
-    accounts = pd.read_csv('./database/accounts.csv', sep=',')
+async def remove_account(name : str):
+    # Download the .csv files from Google Drive
+    service = await asyncio.create_task(drive.Create_Service())
+    await asyncio.create_task(drive.Download_File(service, config.DRIVE_FILE_NAME_ACCOUNTS))
+
+    accounts = pd.read_csv(f'./database/{config.DRIVE_FILE_NAME_ACCOUNTS}', sep=',')
 
     if name not in accounts['api_name'].unique():
         return f'Account with that name ({name}) does not exist.'
 
     accounts = accounts[accounts['api_name'] != name]
     accounts.to_csv('./database/accounts.csv', index=False)
+    accounts.to_csv(f'./database/{config.DRIVE_FILE_NAME_ACCOUNTS}', index=False)
+
+    # Upload Changes to Drive
+    await asyncio.create_task(drive.Upload_File(service, config.DRIVE_FOLDER_NAME, config.DRIVE_FILE_NAME_ACCOUNTS, \
+        f'./database/{config.DRIVE_FILE_NAME_ACCOUNTS}', 'csv'))
 
     return f'Account ({name}) removed.'
 
@@ -48,8 +68,9 @@ def get_accounts():
         list_accounts.append((name, key, secret))
         list_accounts_safe.append((name, key))
 
-        list_accounts.sort()
-        list_accounts_safe.sort()
+        # list_accounts.sort()
+        # list_accounts_safe.sort()
+
     return list_accounts, list_accounts_safe
 
 def add_log(log : RequestLog, management=False):
@@ -89,7 +110,7 @@ def get_logs():
          command, response))
     return list_logs[:20]
 
-async def update_database():
+async def update_database(accounts_only : bool = False):
     # Download the .csv files from Google Drive
     service = await asyncio.create_task(drive.Create_Service())
     await asyncio.create_task(drive.Download_File(service, config.DRIVE_FILE_NAME_ACCOUNTS))
