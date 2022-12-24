@@ -1,3 +1,1 @@
 timestamp|command|response
-1670885140284|token='reset', type='forgot-token', master_token='$FE5ID51673M9HP735VXD6J214UXWJT2KN64CQ3VGLOZ21K58K'|MANAGEMENT : Current Token is : 6l7Bb3aCJ1OyCDXd
-1670884540104|token='reset', type='forgot-token'|ERROR (Wrong Authentication Token) : Wrong Authentication Token.

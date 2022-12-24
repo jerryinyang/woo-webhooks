@@ -68,8 +68,8 @@ def get_accounts():
         list_accounts.append((name, key, secret))
         list_accounts_safe.append((name, key))
 
-        # list_accounts.sort()
-        # list_accounts_safe.sort()
+        list_accounts.sort()
+        list_accounts_safe.sort()
 
     return list_accounts, list_accounts_safe
 
