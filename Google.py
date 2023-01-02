@@ -15,7 +15,7 @@ SCOPES = ['https://www.googleapis.com/auth/drive']
 MIME_TYPES = {
     'folder' : 'application/vnd.google-apps.folder',
     'others' : 'application/vnd.google-apps.unknown',
-    'text' : 'application/vnd.google-apps.document',
+    'text' : 'text/plain',
     'csv' : 'text/csv',
     'sqlite3' : 'application/vnd.sqlite3'
 }

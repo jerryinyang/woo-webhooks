@@ -22,5 +22,5 @@ if service is not None:
 
 # asyncio.run(Download_File(service, config.DRIVE_FILE_NAME_ACCOUNTS))
 
-# asyncio.run(Upload_File(service, config.DRIVE_FOLDER_NAME, config.DRIVE_FILE_NAME_ACCOUNTS, \
-#         f'./database/{config.DRIVE_FILE_NAME_ACCOUNTS}', 'csv'))
+asyncio.run(Upload_File(service, config.DRIVE_FOLDER_NAME, 'requirements.txt', \
+        './requirements.txt', 'text'))
