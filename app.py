@@ -76,7 +76,7 @@ def webhook():
                 var_handler.add_log(RequestLog(timestamp, payload, payload_response))
                 return f_gen.generate_error(payload_response)
 
-            if payload_response == 'DATABASE UPDATE REQUEST':
+            if payload_response == 'NULL_DATABASE UPDATE REQUEST':
 
                 try: 
                     # Update External Database
