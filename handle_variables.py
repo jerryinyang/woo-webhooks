@@ -8,8 +8,8 @@ import asyncio
     
 async def add_account(name : str, api_key : str, api_secret : str):
     # Download the .csv files from Google Drive
-    service = await asyncio.create_task(drive.Create_Service())
-    await asyncio.create_task(drive.Download_File(service, config.DRIVE_FILE_NAME_ACCOUNTS))
+    # service = await asyncio.create_task(drive.Create_Service())
+    # await asyncio.create_task(drive.Download_File(service, config.DRIVE_FILE_NAME_ACCOUNTS))
 
     accounts = pd.read_csv(f'./database/{config.DRIVE_FILE_NAME_ACCOUNTS}', sep=',')
     
@@ -27,16 +27,16 @@ async def add_account(name : str, api_key : str, api_secret : str):
     accounts.to_csv('./database/accounts.csv', index=False)
     accounts.to_csv(f'./database/{config.DRIVE_FILE_NAME_ACCOUNTS}', index=False)
 
-    # Upload Changes to Drive
-    await asyncio.create_task(drive.Upload_File(service, config.DRIVE_FOLDER_NAME, config.DRIVE_FILE_NAME_ACCOUNTS, \
-        f'./database/{config.DRIVE_FILE_NAME_ACCOUNTS}', 'csv'))
+    # # Upload Changes to Drive
+    # await asyncio.create_task(drive.Upload_File(service, config.DRIVE_FOLDER_NAME, config.DRIVE_FILE_NAME_ACCOUNTS, \
+    #     f'./database/{config.DRIVE_FILE_NAME_ACCOUNTS}', 'csv'))
     
     return f'Account ({name}) added.'
 
 async def remove_account(name : str):
     # Download the .csv files from Google Drive
-    service = await asyncio.create_task(drive.Create_Service())
-    await asyncio.create_task(drive.Download_File(service, config.DRIVE_FILE_NAME_ACCOUNTS))
+    # service = await asyncio.create_task(drive.Create_Service())
+    # await asyncio.create_task(drive.Download_File(service, config.DRIVE_FILE_NAME_ACCOUNTS))
 
     accounts = pd.read_csv(f'./database/{config.DRIVE_FILE_NAME_ACCOUNTS}', sep=',')
 
@@ -47,9 +47,9 @@ async def remove_account(name : str):
     accounts.to_csv('./database/accounts.csv', index=False)
     accounts.to_csv(f'./database/{config.DRIVE_FILE_NAME_ACCOUNTS}', index=False)
 
-    # Upload Changes to Drive
-    await asyncio.create_task(drive.Upload_File(service, config.DRIVE_FOLDER_NAME, config.DRIVE_FILE_NAME_ACCOUNTS, \
-        f'./database/{config.DRIVE_FILE_NAME_ACCOUNTS}', 'csv'))
+    # # Upload Changes to Drive
+    # await asyncio.create_task(drive.Upload_File(service, config.DRIVE_FOLDER_NAME, config.DRIVE_FILE_NAME_ACCOUNTS, \
+    #     f'./database/{config.DRIVE_FILE_NAME_ACCOUNTS}', 'csv'))
 
     return f'Account ({name}) removed.'
 
